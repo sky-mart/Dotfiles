@@ -1,0 +1,394 @@
+#+TITLE: My Emacs Configuration
+#+AUTHOR: Vlad Agievich
+#+EMAIL: sky-mart@hotmail.com
+#+OPTIONS: num:nil
+
+* Basic UI
+#+BEGIN_SRC emacs-lisp
+  ;; User Interface
+  (setq inhibit-startup-message t)
+
+  (scroll-bar-mode -1) ; Disable visible scrollbar
+  (tool-bar-mode -1)   ; Disable the toolbar
+  ;; (tooltip-mode -1)    ; Disable tooltips
+  (set-fringe-mode 10) ; Give some breathing room
+  ;; (menu-bar-mode -1)   ; Disable the menubar
+
+  ;; (set-face-attribute 'default nil :font "Fira Code
+
+  ;; Font size 13.5 pt
+  ;; (set-face-attribute 'default nil :height 135)
+#+END_SRC
+
+* Behavior
+#+BEGIN_SRC emacs-lisp
+  ;; Store custom-file separately, don't freak out when it's not found
+  (setq custom-file "~/.emacs.d/custom.el")
+  (load custom-file 'noerror)
+
+  ;; create the autosave dir if necessary, since emacs won't.
+  (make-directory "~/.emacs.d/autosaves/" t)
+
+  ;; Backup behavior
+  ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+  (custom-set-variables
+    '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
+    '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
+
+  ;; start week from Monday
+  (setq calendar-week-start-day 1)
+
+  ;; set timestamps to English
+  (setq system-time-locale "C")
+
+  ;; Map Cmd to be Meta
+  (setq mac-command-modifier 'meta)
+
+  (setq-default word-wrap t) ; Enable word wrap
+
+  (global-display-line-numbers-mode)
+  ;;(column-number-mode)
+  (delete-selection-mode)
+
+  ;; Always wrap lines
+  (global-visual-line-mode 1)
+
+  ;; Highlight the current line
+  (global-hl-line-mode 1)
+
+  ;; Never use tabs, use spaces instead.
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq tab-width 4)
+
+  ;; Delete trailing spaces and add new line in the end of a file on save.
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (setq require-final-newline t)
+
+  ;; C-x, C-c, C-v for cut, copy, paste
+  ;; (cua-mode t)
+
+  (setq apropos-sort-by-scores t) ; Sort apropos results by relevancy
+
+  ;; Comment line or region.
+  (global-set-key (kbd "C-/") 'comment-line)
+
+  (global-set-key (kbd "C-x C-h") 'previous-buffer)
+  (global-set-key (kbd "C-x C-l") 'next-buffer)
+
+  (global-set-key (kbd "C-{") 'shrink-window-horizontally)
+  (global-set-key (kbd "C-}") 'enlarge-window-horizontally)
+
+  (global-unset-key (kbd "C-<down-mouse-1>"))
+  (global-unset-key (kbd "<down-mouse-8>"))
+  (global-unset-key (kbd "<down-mouse-9>"))
+
+  (defun display-ansi-colors ()
+    (interactive)
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+#+END_SRC
+
+* Package setup
+#+BEGIN_SRC emacs-lisp
+  ;; Initialize package sources
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+    ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+     (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+
+  ;; Try package without installation
+  (use-package try)
+#+END_SRC
+
+* General purpose packages
+#+BEGIN_SRC emacs-lisp
+  ;; Emacs bindings with the russian keyboard
+  (use-package reverse-im
+    :config
+    (reverse-im-activate "russian-computer"))
+
+  ;; enable Mac OS X path
+  (use-package exec-path-from-shell
+    :config
+    (exec-path-from-shell-initialize))
+
+  ;; We need Emacs kill ring and system clipboard to be independent. Simpleclip is the solution to that.
+  ;; (use-package simpleclip
+  ;;   :config
+  ;;   (simpleclip-mode 1))
+
+  ;; Linear undo and redo.
+  (use-package undo-fu
+    :config
+    (global-set-key (kbd "C-z") 'undo-fu-only-undo)
+    (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
+
+  (use-package smex)  ;; show recent commands when invoking Alt-x (or Cmd+Shift+p)
+
+  ;; Multiple cursors. Similar to Sublime or VS Code.
+  (use-package multiple-cursors
+    :config
+    (setq mc/always-run-for-all 1)
+    (global-set-key (kbd "M-3") 'mc/mark-next-like-this)
+    (global-set-key (kbd "M-4") 'mc/edit-beginnings-of-lines)
+  ;;  (global-set-key (kbd "M-s-d") 'mc/edit-beginnings-of-lines)
+    (define-key mc/keymap (kbd "<return>") nil))
+
+  (use-package move-text
+    :config
+    (move-text-default-bindings))
+
+  ;; Upcase and lowercase word or region, if selected.
+  ;; To capitalize or un-capitalize word use Alt+c and Alt+l
+  (global-set-key (kbd "M-u") 'upcase-dwim)   ;; Alt+u upcase
+  (global-set-key (kbd "M-l") 'downcase-dwim) ;; Alt-l lowercase
+#+END_SRC
+
+* Help
+#+BEGIN_SRC emacs-lisp
+  ;; Interactive help with key bindings
+  (use-package which-key
+    :diminish which-key-mode
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 0.5))
+
+  ;; Better help
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+#+END_SRC
+
+* UI packages
+#+BEGIN_SRC emacs-lisp
+  ; UI theme
+  (use-package doom-themes
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    ;; (load-theme 'doom-outrun-electric t)
+    (load-theme 'doom-nord-light t)
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+
+  ;; NOTE: The first time you load your configuration on a new machine, you'll
+  ;; need to run the following command interactively so that mode line icons
+  ;; display correctly:
+  ;;
+  ;; M-x all-the-icons-install-fonts
+
+  (use-package all-the-icons)
+
+  ;; Beautiful bottom line
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1))
+
+  ;; Colorful brackets
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+  ;; replace switch-window mechanism
+  (use-package ace-window
+    :init
+    (progn
+      (setq aw-scope 'global) ;; was frame
+      (global-set-key (kbd "C-x O") 'other-frame)
+      (global-set-key [remap other-window] 'ace-window)
+      (custom-set-faces
+       '(aw-leading-char-face
+         ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+      ))
+
+  (winner-mode 1) ;; Window configurations
+#+END_SRC
+
+* Completion
+#+BEGIN_SRC emacs-lisp
+  ;; Completion mechanism
+  (use-package ivy
+    :diminish ivy-mode
+    :bind (("C-s" . swiper)
+    ("C-x b" . ivy-switch-buffer))
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy))
+
+  ;; Additional help
+  (use-package ivy-rich
+    :after ivy
+    :config
+    (ivy-rich-mode 1)
+    (setq ivy-rich-path-style 'abbrev))
+
+  ;; Part of ivy?
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x))
+    :config
+    (counsel-mode 1))
+
+  (use-package flx)   ;; enable fuzzy matching
+  (use-package avy)   ;; enable avy for quick navigation
+#+END_SRC
+
+* Project management
+#+BEGIN_SRC emacs-lisp
+  (defun grep-without-test-and-mock (pattern)
+    (interactive "sPattern: ")
+    (projectile-ripgrep pattern "-g \!\*test"))
+
+  ;; Project management
+  (use-package projectile
+    :diminish projectile-mode
+    :config
+    (projectile-global-mode)
+    :custom (projectile-completion-system 'ivy)
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    ;; (when (file-directory-p "~/Projects")
+      ;; (setq projectile-project-search-path '("~/Projects")))
+    (setq projectile-switch-project-action 'projectile-dired))
+
+  (use-package projectile-ripgrep
+    :bind
+    ("C-S-f" . 'projectile-ripgrep))
+
+  (use-package counsel-projectile
+    :bind
+    ("M-o" . 'counsel-projectile-find-file)
+    :config (counsel-projectile-mode))
+
+  (use-package dashboard
+    :config
+    (setq dashboard-items '((projects . 5)
+                            (recents  . 5)))
+    (dashboard-setup-startup-hook))
+#+END_SRC
+
+* Git
+#+BEGIN_SRC emacs-lisp
+  (use-package transient)
+
+  (transient-define-suffix magit-push-to-gerrit ()
+    "Push to Gerrit"
+    :description "to gerrit"
+    (interactive)
+    (magit-push-refspecs "origin" "HEAD:refs/for/master" nil))
+
+  (transient-define-suffix magit-pull-from-master ()
+    "Pull from master"
+    :description "master"
+    (interactive)
+    (magit-pull-branch "origin/master" (magit-pull-arguments)))
+
+  (use-package magit
+    :config
+    (transient-append-suffix 'magit-push "t"
+      '("g" magit-push-to-gerrit))
+    (transient-append-suffix 'magit-pull "e"
+      '("M" magit-pull-from-master)))
+#+END_SRC
+
+* Development
+#+BEGIN_SRC emacs-lisp
+  ;; File tree
+  (use-package treemacs)
+
+  ;; Development
+  (use-package lsp-mode
+    :hook
+    ((c-mode c++-mode) lsp)
+    :init
+    (setq lsp-keymap-prefix "C-l"))
+
+  (use-package dap-mode)
+
+  (use-package company
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 3)
+    (global-company-mode t))
+
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+#+END_SRC
+
+** Python
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :hook
+    (python-mode . lsp-deferred)
+    :custom
+    ((python-shell-interpreter "python")
+    (lsp-pylsp-plugins-pydocstyle-enabled nil)
+    (dap-python-executable "python")
+    (dap-python-debugger 'debugpy))
+    :config
+    (require 'dap-python))
+
+  (use-package auto-virtualenv
+    :init
+    (use-package pyvenv
+      :config
+      (setenv "WORKON_HOME" "/home/vlad/Documents/Dev/Languages/Python")
+      (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] "))))
+    :config
+    (add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
+    (add-hook 'projectile-after-switch-project-hook 'auto-virtualenv-set-virtualenv)  ;; If using projectile
+    )
+#+END_SRC
+
+** C++
+#+BEGIN_SRC emacs-lisp
+  (setq c-default-style "user")
+
+  ;; (use-package company-irony
+    ;; :config
+    ;; (add-to-list 'company-backends 'company-irony))
+
+  ;; Code completion, syntax checking
+  ;; (use-package irony
+    ;; :config
+    ;; (add-hook 'c++-mode-hook 'irony-mode)
+    ;; (add-hook 'c-mode-hook 'irony-mode)
+    ;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+  ;; RTags C++ Analyzer
+  ;; (use-package rtags
+    ;; :config (define-key c-mode-base-map (kbd "C-M-h") nil)
+    ;; :bind (("M-." . rtags-find-symbol-at-point)
+           ;; ("C-<mouse-1>" . rtags-find-symbol-at-point)
+           ;; ("M-," . rtags-find-references-at-point)
+           ;; ("C-M-," . rtags-find-all-references-at-point)
+           ;; ("C-M-h" . rtags-location-stack-back)
+           ;; ("<mouse-8>" . rtags-location-stack-back)
+           ;; ("C-M-l" . rtags-location-stack-forward)
+           ;; ("<mouse-9>" . rtags-location-stack-forward)))
+
+  ;; bake syntax highlighting
+  ;; (load-file "~/.emacs.d/bake-mode.el")
+#+END_SRC
