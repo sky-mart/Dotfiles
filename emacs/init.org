@@ -32,8 +32,8 @@
   ;; Backup behavior
   ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
   (custom-set-variables
-    '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
-    '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
+   '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
+   '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
 
   ;; start week from Monday
   (setq calendar-week-start-day 1)
@@ -87,6 +87,21 @@
     (interactive)
     (let ((inhibit-read-only t))
       (ansi-color-apply-on-region (point-min) (point-max))))
+
+  (defun split-focus-right ()
+    "Open the same file to the right"
+    (interactive)
+    (split-window-right)
+    (other-window 1))
+
+  (defun split-focus-below ()
+    "Open the same file below"
+    (interactive)
+    (split-window-below)
+    (other-window 1))
+
+  (global-set-key (kbd "C-x 2") 'split-focus-below)
+  (global-set-key (kbd "C-x 3") 'split-focus-right)
 #+END_SRC
 
 * Package setup
@@ -230,7 +245,7 @@
   (use-package ivy
     :diminish ivy-mode
     :bind (("C-s" . swiper)
-    ("C-x b" . ivy-switch-buffer))
+           ("C-x b" . ivy-switch-buffer))
     :config
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
@@ -242,6 +257,26 @@
     :config
     (ivy-rich-mode 1)
     (setq ivy-rich-path-style 'abbrev))
+
+  ;; (use-package ivy-posframe
+  ;;   :ensure t
+  ;;   :delight
+  ;;   :custom
+  ;;   (ivy-posframe-parameters
+  ;;    '((left-fringe . 2)
+  ;;      (right-fringe . 2)
+  ;;      (internal-border-width . 2)))
+  ;;   (ivy-posframe-height-alist
+  ;;    '((swiper . 15)
+  ;;      (swiper-isearch . 15)
+  ;;      (t . 10)))
+  ;;   (ivy-posframe-display-functions-alist
+  ;;    '((complete-symbol . ivy-posframe-display-at-point)
+  ;;      (swiper . nil)
+  ;;      (swiper-isearch . nil)
+  ;;      (t . ivy-posframe-display-at-frame-center)))
+  ;;   :config
+  ;;   (ivy-posframe-mode 1))
 
   ;; Part of ivy?
   (use-package counsel
@@ -335,6 +370,13 @@
 
   (use-package company-box
     :hook (company-mode . company-box-mode))
+
+  (use-package yasnippet
+    :config
+    (yas-global-mode 1)
+    (add-to-list 'company-backends 'company-yasnippet))
+
+  (use-package yasnippet-snippets)
 #+END_SRC
 
 ** Python
@@ -366,6 +408,11 @@
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "user")
 
+  (electric-pair-mode)
+
+  (use-package clang-format+
+    :bind (("M-n" . clang-format-region)))
+
   ;; (use-package company-irony
     ;; :config
     ;; (add-to-list 'company-backends 'company-irony))
@@ -378,16 +425,20 @@
     ;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
   ;; RTags C++ Analyzer
-  ;; (use-package rtags
-    ;; :config (define-key c-mode-base-map (kbd "C-M-h") nil)
-    ;; :bind (("M-." . rtags-find-symbol-at-point)
-           ;; ("C-<mouse-1>" . rtags-find-symbol-at-point)
-           ;; ("M-," . rtags-find-references-at-point)
-           ;; ("C-M-," . rtags-find-all-references-at-point)
-           ;; ("C-M-h" . rtags-location-stack-back)
-           ;; ("<mouse-8>" . rtags-location-stack-back)
-           ;; ("C-M-l" . rtags-location-stack-forward)
-           ;; ("<mouse-9>" . rtags-location-stack-forward)))
+  (use-package rtags
+    :config (define-key c-mode-base-map (kbd "C-M-h") nil)
+    :bind (("M-." . rtags-find-symbol-at-point)
+           ("C-<mouse-1>" . rtags-find-symbol-at-point)
+           ("M-," . rtags-find-references-at-point)
+           ("C-M-," . rtags-find-all-references-at-point)
+           ("C-M-h" . rtags-location-stack-back)
+           ("<mouse-8>" . rtags-location-stack-back)
+           ("C-M-l" . rtags-location-stack-forward)
+           ("<mouse-9>" . rtags-location-stack-forward)))
+
+  (use-package company-rtags
+    :config
+    (add-to-list 'company-backends 'company-rtags))
 
   ;; bake syntax highlighting
   ;; (load-file "~/.emacs.d/bake-mode.el")
