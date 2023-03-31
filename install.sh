@@ -9,4 +9,8 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
+mkdir ~/.config/kitty
 cp $DIR/kitty/* ~/.config/kitty
+
+mkdir ~/.config/rofi
+cp $DIR/rofi/* ~/.config/rofi
