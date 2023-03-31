@@ -481,3 +481,10 @@
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook 'nolinum)
 #+end_src
+* PlantUML
+#+begin_src emacs-lisp
+  (use-package plantuml-mode
+    :config
+    (setq plantuml-jar-path "/home/vlad/.local/bin/plantuml-1.2023.5.jar")
+    (setq plantuml-default-exec-mode 'jar))
+#+end_src
