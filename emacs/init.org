@@ -1,10 +1,16 @@
 #+TITLE: My Emacs Configuration
 #+AUTHOR: Vlad Agievich
 #+EMAIL: sky-mart@hotmail.com
-#+OPTIONS: num:nil
+#+PROPERTY header-args :tangle "~/.emacs.d/init.el"
+
+* Export
+#+begin_src emacs-lisp :tangle no
+(org-babel-tangle)
+(copy-file "~/Dotfiles/emacs/init.el" "~/.emacs.d/init.el" t)
+#+end_src
 
 * Basic UI
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; User Interface
   (setq inhibit-startup-message t)
 
@@ -21,7 +27,7 @@
 #+END_SRC
 
 * Behavior
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Store custom-file separately, don't freak out when it's not found
   (setq custom-file "~/.emacs.d/custom.el")
   (load custom-file 'noerror)
@@ -54,13 +60,17 @@
   (add-hook 'compilation-mode-hook 'nolinum)
 
   ;;(column-number-mode)
-  (delete-selection-mode)
+  (delete-selection-mode 1)
+  (global-superword-mode 1)
 
   ;; Always wrap lines
   (global-visual-line-mode 1)
 
   ;; Highlight the current line
   (global-hl-line-mode 1)
+
+  ;; auto revert
+  (global-auto-revert-mode 1)
 
   ;; Never use tabs, use spaces instead.
   (setq-default indent-tabs-mode nil)
@@ -111,7 +121,7 @@
 #+END_SRC
 
 * Package setup
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Initialize package sources
   (require 'package)
 
@@ -134,7 +144,7 @@
 #+END_SRC
 
 * General purpose packages
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Emacs bindings with the russian keyboard
   (use-package reverse-im
     :config
@@ -178,7 +188,7 @@
 #+END_SRC
 
 * Help
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Interactive help with key bindings
   (use-package which-key
     :diminish which-key-mode
@@ -200,7 +210,7 @@
 #+END_SRC
 
 * UI packages
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ; UI theme
   (use-package doom-themes
     :config
@@ -255,7 +265,8 @@
     :config
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy))
+    (setq ivy-display-style 'fancy)
+    (setq ivy-magic-slash-non-match-action nil))
 
   ;; Additional help
   (use-package ivy-rich
@@ -295,7 +306,7 @@
 #+END_SRC
 
 * Project management
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun grep-without-test-and-mock (pattern)
     (interactive "sPattern: ")
     (projectile-ripgrep pattern "-g \!\*test"))
@@ -331,7 +342,7 @@
 #+END_SRC
 
 * Git
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package transient)
 
   (transient-define-suffix magit-push-to-gerrit ()
@@ -355,7 +366,7 @@
 #+END_SRC
 
 * Development
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; File tree
   (use-package treemacs
     :config
@@ -392,7 +403,7 @@
 #+END_SRC
 
 ** Python
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; requires python packages python-lsp-server and debugpy
 
   (use-package python-mode
@@ -419,7 +430,7 @@
 #+END_SRC
 
 ** C++
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq c-default-style "user")
 
   ;; formatting
@@ -467,22 +478,22 @@
    :config
    (add-to-list 'company-backends 'company-rtags))
 
-  bake syntax highlighting
+  ;; bake syntax highlighting
   (load-file "~/.emacs.d/bake-mode.el")
 #+END_SRC
 
 ** Ruby
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; requires gem install solargraph
 (add-hook 'ruby-mode-hook 'lsp-deferred)
 #+end_src
 
 * Org
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (add-hook 'org-mode-hook 'nolinum)
 #+end_src
 * PlantUML
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package plantuml-mode
     :config
     (setq plantuml-jar-path "/home/vlad/.local/bin/plantuml-1.2023.5.jar")
