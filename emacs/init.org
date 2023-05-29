@@ -100,20 +100,15 @@
     (let ((inhibit-read-only t))
       (ansi-color-apply-on-region (point-min) (point-max))))
 
-  (defun split-focus-right ()
-    "Open the same file to the right"
-    (interactive)
-    (split-window-right)
-    (other-window 1))
+  (global-set-key (kbd "C-x 2") (lambda ()
+                                  (interactive)
+                                  (split-window-below)
+                                  (other-window 1)))
 
-  (defun split-focus-below ()
-    "Open the same file below"
-    (interactive)
-    (split-window-below)
-    (other-window 1))
-
-  (global-set-key (kbd "C-x 2") 'split-focus-below)
-  (global-set-key (kbd "C-x 3") 'split-focus-right)
+  (global-set-key (kbd "C-x 3") (lambda ()
+                                  (interactive)
+                                  (split-window-right)
+                                  (other-window 1)))
 #+END_SRC
 
 * Package setup
@@ -158,19 +153,19 @@
 
   ;; Linear undo and redo.
   (use-package undo-fu
-    :config
-    (global-set-key (kbd "C-z") 'undo-fu-only-undo)
-    (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
+    :bind
+    (("C-z" . undo-fu-only-undo)
+     ("C-S-z" . undo-fu-only-redo)))
 
   (use-package smex)  ;; show recent commands when invoking Alt-x (or Cmd+Shift+p)
 
   ;; Multiple cursors. Similar to Sublime or VS Code.
   (use-package multiple-cursors
+    :bind
+    (("M-3" . mc/mark-next-like-this)
+     ("M-4" . mc/edit-beginnings-of-lines))
     :config
     (setq mc/always-run-for-all 1)
-    (global-set-key (kbd "M-3") 'mc/mark-next-like-this)
-    (global-set-key (kbd "M-4") 'mc/edit-beginnings-of-lines)
-  ;;  (global-set-key (kbd "M-s-d") 'mc/edit-beginnings-of-lines)
     (define-key mc/keymap (kbd "<return>") nil))
 
   (use-package move-text
@@ -238,11 +233,12 @@
 
   ;; replace switch-window mechanism
   (use-package ace-window
+    :bind
+    (("C-x O" . other-frame)
+     ([remap other-window] . 'ace-window))
     :init
     (progn
       (setq aw-scope 'global) ;; was frame
-      (global-set-key (kbd "C-x O") 'other-frame)
-      (global-set-key [remap other-window] 'ace-window)
       (custom-set-faces
        '(aw-leading-char-face
          ((t (:inherit ace-jump-face-foreground :height 3.0)))))
@@ -349,7 +345,7 @@
 
   (use-package counsel-projectile
     :bind
-    ("M-o" . 'counsel-projectile-find-file)
+    (("M-o" . counsel-projectile-find-file))
     :config (counsel-projectile-mode))
 
   (use-package dashboard
