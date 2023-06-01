@@ -507,6 +507,14 @@
 * Org
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'org-mode-hook 'nolinum)
+
+  (use-package org-mobile-sync
+    :config
+    (setq org-directory "~/Notes/"
+          org-mobile-inbox-for-pull (concat org-directory "from-mobile.org")
+          org-mobile-files (directory-files-recursively org-directory ".*\.org")
+          org-mobile-directory "/media/Notes"))
+
 #+end_src
 * PlantUML
 #+begin_src emacs-lisp :tangle yes
