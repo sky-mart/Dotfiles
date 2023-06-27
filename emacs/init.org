@@ -506,20 +506,29 @@
 
 * Org
 #+begin_src emacs-lisp :tangle yes
-  (add-hook 'org-mode-hook 'nolinum)
 
-  (defun org-mobile-files-refresh ()
-    (setq org-mobile-files (append
-      (directory-files-recursively org-directory ".*\.org")
-      '("mobileorg.org"))))
+(require 'org-habit)
 
-  (use-package org-mobile-sync
-    :custom
-    (org-directory "~/Notes/")
-    (org-mobile-inbox-for-pull (concat org-directory "from-mobile.org"))
-    (org-mobile-directory "/media/Notes")
-    :hook
-    ((org-mobile-pre-push org-mobile-post-pull) . org-mobile-files-refresh))
+;; Some basic Org defaults
+(use-package org
+  :hook  (org-mode . nolinum)
+  :config
+  (add-to-list 'org-modules 'org-habit t)
+  (setq org-habit-show-all-today t)
+  (setq org-startup-indented t)         ;; Visually indent sections. This looks better for smaller files.
+  (setq org-src-tab-acts-natively t)    ;; Tab in source blocks should act like in major mode
+  (setq org-src-preserve-indentation t)
+  (setq org-log-into-drawer t)          ;; State changes for todos and also notes should go into a Logbook drawer
+  (setq org-src-fontify-natively t)     ;; Code highlighting in code blocks
+  (setq org-log-done 'time)             ;; Add closed date when todo goes to DONE state
+  (setq org-support-shift-select t))    ;; Allow shift selection with arrows.
+
+
+;; Store all my org files in ~/org.
+(setq org-directory "/media/Notes")
+
+;; And all of those files should be in included agenda.
+(setq org-agenda-files '("/media/Notes"))
 
 #+end_src
 * PlantUML
