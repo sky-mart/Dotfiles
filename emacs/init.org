@@ -52,12 +52,8 @@
 
   (setq-default word-wrap t) ; Enable word wrap
 
-  (global-display-line-numbers-mode)
-  (defun nolinum ()
-    (display-line-numbers-mode -1))
-
-  (add-hook 'dired-mode-hook 'nolinum)
-  (add-hook 'compilation-mode-hook 'nolinum)
+  (defun linum () (display-line-numbers-mode 1))
+  (add-hook 'prog-mode-hook 'linum)
 
   ;;(column-number-mode)
   (delete-selection-mode 1)
@@ -126,7 +122,8 @@
   (require 'package)
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
+                           ("gnu" . "https://elpa.gnu.org/packages/")
+                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
   ;;(unless package-archive-contents
     ;;(package-refresh-contents))
@@ -383,9 +380,7 @@
 * Development
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; File tree
-  (use-package treemacs
-    :config
-    (add-hook 'treemacs-mode-hook 'nolinum))
+  (use-package treemacs)
 
   ;; Development
   (use-package lsp-mode
@@ -509,18 +504,16 @@
 (require 'org-habit)
 
 ;; Some basic Org defaults
-(use-package org
-  :hook  (org-mode . nolinum)
-  :config
-  (add-to-list 'org-modules 'org-habit t)
-  (setq org-habit-show-all-today t)
-  (setq org-startup-indented t)         ;; Visually indent sections. This looks better for smaller files.
-  (setq org-src-tab-acts-natively t)    ;; Tab in source blocks should act like in major mode
-  (setq org-src-preserve-indentation t)
-  (setq org-log-into-drawer t)          ;; State changes for todos and also notes should go into a Logbook drawer
-  (setq org-src-fontify-natively t)     ;; Code highlighting in code blocks
-  (setq org-log-done 'time)             ;; Add closed date when todo goes to DONE state
-  (setq org-support-shift-select t))    ;; Allow shift selection with arrows.
+
+(add-to-list 'org-modules 'org-habit t)
+(setq org-habit-show-all-today t)
+(setq org-startup-indented t)         ;; Visually indent sections. This looks better for smaller files.
+(setq org-src-tab-acts-natively t)    ;; Tab in source blocks should act like in major mode
+(setq org-src-preserve-indentation t)
+(setq org-log-into-drawer t)          ;; State changes for todos and also notes should go into a Logbook drawer
+(setq org-src-fontify-natively t)     ;; Code highlighting in code blocks
+(setq org-log-done 'time)             ;; Add closed date when todo goes to DONE state
+(setq org-support-shift-select t)    ;; Allow shift selection with arrows.
 
 
 ;; Store all my org files in ~/org.
