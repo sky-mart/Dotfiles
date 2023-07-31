@@ -319,9 +319,17 @@
 
 * Project management
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun grep-without-test-and-mock (pattern)
+  (defun va/rg-project (pattern args)
+    (interactive "sPattern: \nsArguments: ")
+    (ripgrep-regexp pattern (projectile-project-root) (list args)))
+
+  (defun va/rg-only-sources (pattern)
     (interactive "sPattern: ")
-    (projectile-ripgrep pattern "-g \!\*test"))
+    (va/rg-project pattern  "-th -tc -tcpp"))
+
+  (defun va/rg-no-test-and-mock (pattern)
+    (interactive "sPattern: ")
+    (va/rg-project pattern "-th -tc -tcpp -g '!*test*' -g '!*mock*'"))
 
   ;; Project management
   (use-package projectile
@@ -331,15 +339,13 @@
     :custom (projectile-completion-system 'ivy)
     :bind-keymap
     ("C-c p" . projectile-command-map)
+    :bind
+    ("C-S-f" . va/rg-no-test-and-mock)
     :init
     ;; NOTE: Set this to the folder where you keep your Git repos!
     ;; (when (file-directory-p "~/Projects")
       ;; (setq projectile-project-search-path '("~/Projects")))
     (setq projectile-switch-project-action 'projectile-dired))
-
-  (use-package projectile-ripgrep
-    :bind
-    ("C-S-f" . 'projectile-ripgrep))
 
   (use-package counsel-projectile
     :bind
