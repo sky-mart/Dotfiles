@@ -443,55 +443,79 @@
 
 ** C++
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq c-default-style "user")
+(setq c-default-style "user")
 
-  ;; formatting
-  (use-package clang-format+
-    :bind (("M-n" . clang-format-region)))
+;; formatting
+(use-package clang-format+
+  :bind (("M-n" . clang-format-region)))
 
-  ;; for pure C projects remove in .dir_locals
-  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-  (c-set-offset 'innamespace '0)
-  ;; (electric-pair-mode)
+;; for pure C projects remove in .dir_locals
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(c-set-offset 'innamespace '0)
+;; (electric-pair-mode)
 
-  (add-hook 'c-mode-hook 'lsp-deferred)
-  (add-hook 'c++-mode-hook 'lsp-deferred)
+(add-hook 'c-mode-hook 'lsp-deferred)
+(add-hook 'c++-mode-hook 'lsp-deferred)
 
-  ;; (use-package company-lsp)
+;; (use-package company-lsp)
 
-  ;; on Linux one needs to install Mono to debug
-  (require 'dap-cpptools)
+;; on Linux one needs to install Mono to debug
+(require 'dap-cpptools)
 
-  ;; (use-package company-irony
-  ;; :config
-  ;; (add-to-list 'company-backends 'company-irony))
+;; (use-package company-irony
+;; :config
+;; (add-to-list 'company-backends 'company-irony))
 
-  ;; Code completion, syntax checking
-  ;; (use-package irony
-  ;; :config
-  ;; (add-hook 'c++-mode-hook 'irony-mode)
-  ;; (add-hook 'c-mode-hook 'irony-mode)
-  ;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+;; Code completion, syntax checking
+;; (use-package irony
+;; :config
+;; (add-hook 'c++-mode-hook 'irony-mode)
+;; (add-hook 'c-mode-hook 'irony-mode)
+;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-  ;; RTags C++ Analyzer
-  (use-package rtags
-   :config (define-key c-mode-base-map (kbd "C-M-h") nil)
-   :bind (("M-." . rtags-find-symbol-at-point)
-          ("C-<mouse-1>" . rtags-find-symbol-at-point)
-          ("M-," . rtags-find-references-at-point)
-          ("C-M-," . rtags-find-all-references-at-point)
-          ("C-M-h" . rtags-location-stack-back)
-          ("<mouse-8>" . rtags-location-stack-back)
-          ("C-M-l" . rtags-location-stack-forward)
-          ("<mouse-9>" . rtags-location-stack-forward)))
+;; RTags C++ Analyzer
+(use-package rtags
+  :config (define-key c-mode-base-map (kbd "C-M-h") nil)
+  :bind (("M-." . rtags-find-symbol-at-point)
+         ("C-<mouse-1>" . rtags-find-symbol-at-point)
+         ("M-," . rtags-find-references-at-point)
+         ("C-M-," . rtags-find-all-references-at-point)
+         ("C-M-h" . rtags-location-stack-back)
+         ("<mouse-8>" . rtags-location-stack-back)
+         ("C-M-l" . rtags-location-stack-forward)
+         ("<mouse-9>" . rtags-location-stack-forward)))
 
 
-  (use-package company-rtags
-   :config
-   (add-to-list 'company-backends 'company-rtags))
+(use-package company-rtags
+  :config
+  (add-to-list 'company-backends 'company-rtags))
 
-  ;; bake syntax highlighting
-  (load-file "~/.emacs.d/bake-mode.el")
+;; bake syntax highlighting
+(load-file "~/.emacs.d/bake-mode.el")
+
+(defun mart/get-project-meta-dir ()
+  (interactive)
+  (setq basedir default-directory)
+  (while
+      (and
+       (not (file-exists-p (file-name-concat basedir "Project.meta")))
+       (not (string-equal basedir projectile-project-src-dir)))
+    ;; (print basedir)
+    (setq basedir (directory-file-name (file-name-directory basedir))))
+  basedir
+  )
+
+;; TODO: pick a test interactively
+(defun mart/gdb-current-tests ()
+  (interactive)
+  ;; find a directory with project.meta
+  (setq moduledir (mart/get-project-meta-dir)
+        modulename (file-name-nondirectory moduledir))
+  (gdb (format "gdb -i=mi --args %s" (file-name-concat moduledir "build" "UnitTestBase" modulename)))
+  )
+
+(define-key c-mode-map (kbd "<f5>") 'mart/gdb-current-tests)
+(define-key c++-mode-map (kbd "<f5>") 'mart/gdb-current-tests)
 #+END_SRC
 
 ** Ruby
