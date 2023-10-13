@@ -543,10 +543,10 @@
 
 
 ;; Store all my org files in ~/org.
-(setq org-directory "/media/Notes")
+(setq org-directory "~/Documents/Notes")
 
 ;; And all of those files should be in included agenda.
-(setq org-agenda-files '("/media/Notes"))
+(setq org-agenda-files '("~/Documents/Notes"))
 
 #+end_src
 * PlantUML
