@@ -28,87 +28,90 @@
 
 * Behavior
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Store custom-file separately, don't freak out when it's not found
-  (setq custom-file "~/.emacs.d/custom.el")
-  (load custom-file 'noerror)
+;; Store custom-file separately, don't freak out when it's not found
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
 
-  ;; create the autosave dir if necessary, since emacs won't.
-  (make-directory "~/.emacs.d/autosaves/" t)
+;; create the autosave dir if necessary, since emacs won't.
+(make-directory "~/.emacs.d/autosaves/" t)
 
-  ;; Backup behavior
-  ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
-  (custom-set-variables
-   '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
-   '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
+;; Backup behavior
+;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+(custom-set-variables
+ '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
+ '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
 
-  ;; start week from Monday
-  (setq calendar-week-start-day 1)
+;; start week from Monday
+(setq calendar-week-start-day 1)
 
-  ;; set timestamps to English
-  (setq system-time-locale "C")
+;; set timestamps to English
+(setq system-time-locale "C")
 
-  ;; Map Cmd to be Meta
-  (setq mac-command-modifier 'meta)
+;; Map Cmd to be Meta
+(setq mac-command-modifier 'meta)
 
-  (setq-default word-wrap t) ; Enable word wrap
+(setq-default word-wrap t) ; Enable word wrap
 
-  (defun linum () (display-line-numbers-mode 1))
-  (add-hook 'prog-mode-hook 'linum)
+(defun linum () (display-line-numbers-mode 1))
+(add-hook 'prog-mode-hook 'linum)
 
-  ;;(column-number-mode)
-  (delete-selection-mode 1)
-  (global-superword-mode 1)
+;;(column-number-mode)
+(delete-selection-mode 1)
+(global-superword-mode 1)
 
-  ;; Always wrap lines
-  (global-visual-line-mode 1)
+;; Always wrap lines
+(global-visual-line-mode 1)
 
-  ;; Highlight the current line
-  (global-hl-line-mode 1)
+;; Highlight the current line
+(global-hl-line-mode 1)
 
-  ;; auto revert
-  (global-auto-revert-mode 1)
+;; auto revert
+(global-auto-revert-mode 1)
 
-  ;; Never use tabs, use spaces instead.
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 4)
-  (setq tab-width 4)
+;; Never use tabs, use spaces instead.
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq tab-width 4)
 
-  ;; Delete trailing spaces and add new line in the end of a file on save.
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
-  (setq require-final-newline t)
+;; Delete trailing spaces and add new line in the end of a file on save.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(setq require-final-newline t)
 
-  ;; C-x, C-c, C-v for cut, copy, paste
-  ;; (cua-mode t)
+;; C-x, C-c, C-v for cut, copy, paste
+;; (cua-mode t)
 
-  (setq apropos-sort-by-scores t) ; Sort apropos results by relevancy
+(setq apropos-sort-by-scores t) ; Sort apropos results by relevancy
 
-  ;; Comment line or region.
-  (global-set-key (kbd "C-/") 'comment-line)
+;; Comment line or region.
+(global-set-key (kbd "C-/") 'comment-line)
 
-  (global-set-key (kbd "C-x C-h") 'previous-buffer)
-  (global-set-key (kbd "C-x C-l") 'next-buffer)
+(global-set-key (kbd "C-x C-h") 'previous-buffer)
+(global-set-key (kbd "C-x C-l") 'next-buffer)
 
-  (global-set-key (kbd "C-{") 'shrink-window-horizontally)
-  (global-set-key (kbd "C-}") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-{") 'shrink-window-horizontally)
+(global-set-key (kbd "C-}") 'enlarge-window-horizontally)
 
-  (global-unset-key (kbd "C-<down-mouse-1>"))
-  (global-unset-key (kbd "<down-mouse-8>"))
-  (global-unset-key (kbd "<down-mouse-9>"))
+(global-unset-key (kbd "C-<down-mouse-1>"))
+(global-unset-key (kbd "<down-mouse-8>"))
+(global-unset-key (kbd "<down-mouse-9>"))
 
-  (defun display-ansi-colors ()
-    (interactive)
-    (let ((inhibit-read-only t))
-      (ansi-color-apply-on-region (point-min) (point-max))))
+(defun display-ansi-colors ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
 
-  (global-set-key (kbd "C-x 2") (lambda ()
-                                  (interactive)
-                                  (split-window-below)
-                                  (other-window 1)))
+(global-set-key (kbd "C-x 2") (lambda ()
+                                (interactive)
+                                (split-window-below)
+                                (other-window 1)))
 
-  (global-set-key (kbd "C-x 3") (lambda ()
-                                  (interactive)
-                                  (split-window-right)
-                                  (other-window 1)))
+(global-set-key (kbd "C-x 3") (lambda ()
+                                (interactive)
+                                (split-window-right)
+                                (other-window 1)))
+
+(global-set-key (kbd "<f3>") 'window-configuration-to-register)
+(global-set-key (kbd "M-<f3>") 'jump-to-register)
 #+END_SRC
 
 * Package setup
@@ -294,7 +297,10 @@
     (counsel-mode 1))
 
   (use-package flx)   ;; enable fuzzy matching
-  (use-package avy)   ;; enable avy for quick navigation
+
+;; enable avy for quick navigation
+(use-package avy
+  :bind (("C-o" . avy-goto-char)))
 
   (use-package fzf
     :bind
@@ -493,7 +499,7 @@
 ;; bake syntax highlighting
 (load-file "~/.emacs.d/bake-mode.el")
 
-(defun mart/get-project-meta-dir ()
+(defun bake-get-moduledir ()
   (interactive)
   (setq basedir default-directory)
   (while
@@ -502,26 +508,82 @@
        (not (string-equal basedir projectile-project-src-dir)))
     ;; (print basedir)
     (setq basedir (directory-file-name (file-name-directory basedir))))
-  basedir
-  )
+  basedir)
+
+(defun bake-build-unit-tests (module)
+  (interactive "sModule: ")
+  (let ((default-directory projectile-project-root))
+    (shell-command (format "bake -m %s -b UnitTestBase --adapt gcc -a black -j8 --compilation-db" module))
+    (switch-to-buffer "*Shell Command Output*")
+    (display-ansi-colors)
+    (end-of-buffer)
+    (switch-to-prev-buffer)))
+
+(defun bake-run-current-tests ()
+  (interactive)
+  (let ((moduledir (bake-get-moduledir))
+        (modulename (file-name-nondirectory moduledir))
+        (test-executable (file-name-concat moduledir "build" "UnitTestBase" modulename)))
+    (shell-command test-executable)
+    (switch-to-buffer "*Shell Command Output*")
+    (end-of-buffer)
+    (switch-to-prev-buffer)))
 
 ;; TODO: pick a test interactively
-(defun mart/gdb-current-tests ()
+(defun bake-gdb-current-tests ()
   (interactive)
   ;; find a directory with project.meta
-  (setq moduledir (mart/get-project-meta-dir)
-        modulename (file-name-nondirectory moduledir))
-  (gdb (format "gdb -i=mi --args %s" (file-name-concat moduledir "build" "UnitTestBase" modulename)))
-  )
+  (setq moduledir (bake-get-moduledir)
+        modulename (file-name-nondirectory moduledir)
+        test-executable (file-name-concat moduledir "build" "UnitTestBase" modulename))
+  ;; (unless (file-exists-p test-executable)
+    ;; (bake-build-unit-tests moduledir))
+  (gdb (format "gdb -i=mi --args %s" test-executable)))
 
-(define-key c-mode-map (kbd "<f5>") 'mart/gdb-current-tests)
-(define-key c++-mode-map (kbd "<f5>") 'mart/gdb-current-tests)
+(define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+(define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+
+(define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+(define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+
+(defun cxx-genmock (file-name)
+  (interactive "sFilename: ")
+  (shell-command (format "genmock %s" (buffer-file-name))))
+
+(defun insert-string-before-last-period (original-string to-insert)
+  "Insert TO-INSERT into ORIGINAL-STRING before the last period."
+  (let ((dot-pos (string-search "." original-string)))
+    (concat (substring original-string 0 dot-pos)
+            to-insert
+            (substring original-string dot-pos))))
+
+(defun get-mock-short-name (file-name)
+  (insert-string-before-last-period (string-remove-prefix "I" (file-name-nondirectory file-name)) "Mock"))
+
+(defun bake-get-mock-file-name (file-name)
+  (let ((moduledir (bake-get-moduledir)))
+    (file-name-concat moduledir
+                      "mock"
+                      "gmock"
+                      (file-relative-name (file-name-directory file-name) moduledir)
+                      (get-mock-short-name file-name))))
+
+(defun bake-mock-current ()
+  (interactive)
+  (with-temp-buffer
+    (insert (shell-command-to-string (format "genmock %s" (buffer-file-name))))
+    (write-region (point-min) (point-max) (bake-get-mock-file-name (buffer-file-name)))))
+
+(define-key c-mode-map (kbd "M-]") 'bake-mock-current)
+(define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
 #+END_SRC
 
 ** Ruby
 #+begin_src emacs-lisp :tangle yes
 ;; requires gem install solargraph
 (add-hook 'ruby-mode-hook 'lsp-deferred)
+
+(setenv "GEM_HOME" (format "%s/.local/gem" (getenv "HOME")))
 #+end_src
 
 * Org
@@ -547,6 +609,10 @@
 
 ;; And all of those files should be in included agenda.
 (setq org-agenda-files '("~/Documents/Notes"))
+
+(global-set-key (kbd "C-`") (lambda ()
+                              (interactive)
+                              (dired "~/Documents/Notes/")))
 
 #+end_src
 * PlantUML
