@@ -594,25 +594,21 @@
 ;; Some basic Org defaults
 
 (add-to-list 'org-modules 'org-habit t)
-(setq org-habit-show-all-today t)
-(setq org-startup-indented t)         ;; Visually indent sections. This looks better for smaller files.
-(setq org-src-tab-acts-natively t)    ;; Tab in source blocks should act like in major mode
-(setq org-src-preserve-indentation t)
-(setq org-log-into-drawer t)          ;; State changes for todos and also notes should go into a Logbook drawer
-(setq org-src-fontify-natively t)     ;; Code highlighting in code blocks
-(setq org-log-done 'time)             ;; Add closed date when todo goes to DONE state
-(setq org-support-shift-select t)    ;; Allow shift selection with arrows.
-
-
-;; Store all my org files in ~/org.
-(setq org-directory "~/Documents/Notes")
-
-;; And all of those files should be in included agenda.
-(setq org-agenda-files '("~/Documents/Notes"))
+(setq org-habit-show-all-today t
+      org-startup-indented t         ;; Visually indent sections. This looks better for smaller files.
+      org-src-tab-acts-natively t    ;; Tab in source blocks should act like in major mode
+      org-src-preserve-indentation t
+      org-log-into-drawer t          ;; State changes for todos and also notes should go into a Logbook drawer
+      org-src-fontify-natively t     ;; Code highlighting in code blocks
+      org-support-shift-select t     ;; Allow shift selection with arrows
+      org-startup-folded t           ;; Collapse all headlines
+      org-directory "~/Documents/Notes"
+      org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
+      )
 
 (global-set-key (kbd "C-`") (lambda ()
                               (interactive)
-                              (dired "~/Documents/Notes/")))
+                              (dired org-directory)))
 
 #+end_src
 * PlantUML
