@@ -1,3 +1,4 @@
+
 #+TITLE: My Emacs Configuration
 #+AUTHOR: Vlad Agievich
 #+EMAIL: sky-mart@hotmail.com
@@ -333,6 +334,18 @@
     (interactive "sPattern: ")
     (mart/rg-project pattern "-th -tc -tcpp -g '!*test*' -g '!*mock*'"))
 
+(defun mart/projectile-compile-and-scroll (arg)
+  (interactive "P")
+  (projectile-compile-project arg)
+  (switch-to-buffer "*compilation*")
+  (end-of-buffer))
+
+(defun mart/projectile-install-and-scroll (arg)
+  (interactive "P")
+  (projectile-install-project arg)
+  (switch-to-buffer "*compilation*")
+  (end-of-buffer))
+
   ;; Project management
   (use-package projectile
     :diminish projectile-mode
@@ -342,7 +355,10 @@
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :bind
-    ("C-S-f" . mart/rg-no-test-and-mock)
+    (("C-S-f" . mart/rg-no-test-and-mock)
+     :map projectile-command-map
+     ("c" . mart/projectile-compile-and-scroll)
+     ("L" . mart/projectile-install-and-scroll))
     :init
     ;; NOTE: Set this to the folder where you keep your Git repos!
     ;; (when (file-directory-p "~/Projects")
