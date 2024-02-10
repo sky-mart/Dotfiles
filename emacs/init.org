@@ -521,11 +521,11 @@
     ;; (bake-build-unit-tests moduledir))
   (gdb (format "gdb -i=mi --args %s" test-executable)))
 
-(define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
-(define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+;; (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
 
-(define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
-(define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+;; (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
 
 (defun cxx-genmock (file-name)
   (interactive "sFilename: ")
@@ -555,8 +555,8 @@
     (insert (shell-command-to-string (format "genmock %s" (buffer-file-name))))
     (write-region (point-min) (point-max) (bake-get-mock-file-name (buffer-file-name)))))
 
-(define-key c-mode-map (kbd "M-]") 'bake-mock-current)
-(define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
+;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
+;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
 #+END_SRC
 
 ** Ruby
