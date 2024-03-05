@@ -409,8 +409,7 @@
       (c-mode . eglot-ensure)
       :config
       (add-to-list 'eglot-server-programs
-                   '((c++-mode c-mode) .
-                     ("clangd" "--query-driver=/usr/bin/arm-none-eabi-gcc,/usr/bin/arm-none-eabi-g++"))))
+                   '((c++-mode c-mode) . ("clangd" "--query-driver=/home/vladislav-agievich/.esr/diab5.9.4.8/LINUX386/bin/dcc"))))
 
   (use-package company
     :config
@@ -527,33 +526,50 @@
 ;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
 ;; (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
 
-(defun cxx-genmock (file-name)
+(defun cxx-genmock-interface (input-file output-header)
+  (interactive "sFilename: \nsOutput header: ")
+  (shell-command (format "genmock --mocktype=interface --outh=%s %s" output-header input-file)))
+
+(defun cxx-genmock-singleton (input-file output-header output-source)
+  (interactive "sFilename: \nsOutput header: ")
+  (shell-command (format "genmock --mocktype=singleton --outh=%s --outsrc=%s %s" output-header output-source input-file)))
+
+(defun get-mock-class (file-name)
   (interactive "sFilename: ")
-  (shell-command (format "genmock %s" (buffer-file-name))))
+  (let ((rel-file-name (file-name-nondirectory file-name)))
+    (string-remove-prefix
+     "I"
+     (concat (substring rel-file-name 0 (string-search "." rel-file-name)) "Mock"))))
 
-(defun insert-string-before-last-period (original-string to-insert)
-  "Insert TO-INSERT into ORIGINAL-STRING before the last period."
-  (let ((dot-pos (string-search "." original-string)))
-    (concat (substring original-string 0 dot-pos)
-            to-insert
-            (substring original-string dot-pos))))
-
-(defun get-mock-short-name (file-name)
-  (insert-string-before-last-period (string-remove-prefix "I" (file-name-nondirectory file-name)) "Mock"))
-
-(defun bake-get-mock-file-name (file-name)
+(defun bake-get-mock-header (file-name mock-path)
   (let ((moduledir (bake-get-moduledir)))
     (file-name-concat moduledir
-                      "mock"
-                      "gmock"
+                      mock-path
                       (file-relative-name (file-name-directory file-name) moduledir)
-                      (get-mock-short-name file-name))))
+                      (concat (get-mock-class file-name) ".h"))))
 
-(defun bake-mock-current ()
-  (interactive)
-  (with-temp-buffer
-    (insert (shell-command-to-string (format "genmock %s" (buffer-file-name))))
-    (write-region (point-min) (point-max) (bake-get-mock-file-name (buffer-file-name)))))
+(defun bake-get-mock-source (file-name mock-path)
+  (let ((moduledir (bake-get-moduledir)))
+    (file-name-concat moduledir
+                      mock-path
+                      "src"
+                      (file-relative-name
+                       (file-name-directory file-name)
+                       (file-name-concat moduledir "include"))
+                      (concat (get-mock-class file-name) ".cpp"))))
+
+(defun bake-mock-current-interface (mock-path)
+  (interactive "sMock path: ")
+  (cxx-genmock-interface
+   (buffer-file-name)
+   (bake-get-mock-header (buffer-file-name) mock-path)))
+
+(defun bake-mock-current-singleton (mock-path)
+  (interactive "sMock path: ")
+  (cxx-genmock-singleton
+   (buffer-file-name)
+   (bake-get-mock-header (buffer-file-name) mock-path)
+   (bake-get-mock-source (buffer-file-name) mock-path)))
 
 ;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
 ;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
