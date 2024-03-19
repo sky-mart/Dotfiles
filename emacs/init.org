@@ -457,25 +457,31 @@
 
 ** C++
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; formatting
-(use-package clang-format+
-  :bind (("M-n" . clang-format-region)))
+  ;; formatting
+  (use-package clang-format+
+    :bind (("M-n" . clang-format-region)))
 
-;; for pure C projects remove in .dir_locals
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(c-set-offset 'innamespace '0)
-;; (electric-pair-mode)
+  ;; for pure C projects remove in .dir_locals
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+  (c-set-offset 'innamespace '0)
+  ;; (electric-pair-mode)
 
-(load-file "~/.emacs.d/esr.el")
+  (load-file "~/.emacs.d/esr.el")
 
-;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
-;; (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+  (defun mart/c++-mode-hook ()
+    "Custom key bindings for C++ mode."
+    (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+    (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+    )
 
-;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
-;; (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+  (add-hook 'c++-mode-hook 'mart/c++-mode-hook)
 
-;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
-;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
+  ;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+
+  ;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+
+  ;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
+  ;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
 #+END_SRC
 
 ** Ruby

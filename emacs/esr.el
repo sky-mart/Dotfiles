@@ -27,9 +27,11 @@
         (modulename (file-name-nondirectory moduledir))
         (test-executable (file-name-concat moduledir "build" "UnitTestBase" modulename)))
     (shell-command test-executable)
+    (split-window-below)
+    (other-window 1)
     (switch-to-buffer "*Shell Command Output*")
     (end-of-buffer)
-    (switch-to-prev-buffer)))
+    (other-window -1)))
 
 ;; TODO: pick a test interactively
 (defun bake-gdb-current-tests ()
