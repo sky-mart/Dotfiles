@@ -350,7 +350,7 @@
   (use-package projectile
     :diminish projectile-mode
     :config
-    (projectile-global-mode)
+     (add-to-list 'projectile-project-root-files "Project.meta")
     :custom (projectile-completion-system 'ivy)
     :bind-keymap
     ("C-c p" . projectile-command-map)
@@ -420,12 +420,12 @@
   (use-package company-box
     :hook (company-mode . company-box-mode))
 
-            ;; (use-package yasnippet
-              ;; :config
-              ;; (yas-global-mode 1)
-              ;; (add-to-list 'company-backends 'company-yasnippet))
+(use-package yasnippet
+  :config
+  (yas-global-mode 1)
+  (add-to-list 'company-backends 'company-yasnippet))
 
-            ;; (use-package yasnippet-snippets)
+(use-package yasnippet-snippets)
 #+END_SRC
 
 ** Python
@@ -457,8 +457,6 @@
 
 ** C++
 #+BEGIN_SRC emacs-lisp :tangle yes
-(setq c-default-style "user")
-
 ;; formatting
 (use-package clang-format+
   :bind (("M-n" . clang-format-region)))
@@ -468,108 +466,13 @@
 (c-set-offset 'innamespace '0)
 ;; (electric-pair-mode)
 
-;; (add-hook 'c-mode-hook 'lsp-deferred)
-;; (add-hook 'c++-mode-hook 'lsp-deferred)
-
-;; (use-package company-lsp)
-
-;; on Linux one needs to install Mono to debug
-;; (require 'dap-cpptools)
-
-;; bake syntax highlighting
-(load-file "~/.emacs.d/bake-mode.el")
-
-(defun bake-get-moduledir ()
-  (interactive)
-  (setq basedir default-directory)
-  (while
-      (and
-       (not (file-exists-p (file-name-concat basedir "Project.meta")))
-       (not (string-equal basedir projectile-project-src-dir)))
-    ;; (print basedir)
-    (setq basedir (directory-file-name (file-name-directory basedir))))
-  basedir)
-
-(defun bake-build-unit-tests (module)
-  (interactive "sModule: ")
-  (let ((default-directory projectile-project-root))
-    (shell-command (format "bake -m %s -b UnitTestBase --adapt gcc -a black -j8 --compilation-db" module))
-    (switch-to-buffer "*Shell Command Output*")
-    (display-ansi-colors)
-    (end-of-buffer)
-    (switch-to-prev-buffer)))
-
-(defun bake-run-current-tests ()
-  (interactive)
-  (let ((moduledir (bake-get-moduledir))
-        (modulename (file-name-nondirectory moduledir))
-        (test-executable (file-name-concat moduledir "build" "UnitTestBase" modulename)))
-    (shell-command test-executable)
-    (switch-to-buffer "*Shell Command Output*")
-    (end-of-buffer)
-    (switch-to-prev-buffer)))
-
-;; TODO: pick a test interactively
-(defun bake-gdb-current-tests ()
-  (interactive)
-  ;; find a directory with project.meta
-  (setq moduledir (bake-get-moduledir)
-        modulename (file-name-nondirectory moduledir)
-        test-executable (file-name-concat moduledir "build" "UnitTestBase" modulename))
-  ;; (unless (file-exists-p test-executable)
-    ;; (bake-build-unit-tests moduledir))
-  (gdb (format "gdb -i=mi --args %s" test-executable)))
+(load-file "~/.emacs.d/esr.el")
 
 ;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
 ;; (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
 
 ;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
 ;; (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
-
-(defun cxx-genmock-interface (input-file output-header)
-  (interactive "sFilename: \nsOutput header: ")
-  (shell-command (format "genmock --mocktype=interface --outh=%s %s" output-header input-file)))
-
-(defun cxx-genmock-singleton (input-file output-header output-source)
-  (interactive "sFilename: \nsOutput header: ")
-  (shell-command (format "genmock --mocktype=singleton --outh=%s --outsrc=%s %s" output-header output-source input-file)))
-
-(defun get-mock-class (file-name)
-  (interactive "sFilename: ")
-  (let ((rel-file-name (file-name-nondirectory file-name)))
-    (string-remove-prefix
-     "I"
-     (concat (substring rel-file-name 0 (string-search "." rel-file-name)) "Mock"))))
-
-(defun bake-get-mock-header (file-name mock-path)
-  (let ((moduledir (bake-get-moduledir)))
-    (file-name-concat moduledir
-                      mock-path
-                      (file-relative-name (file-name-directory file-name) moduledir)
-                      (concat (get-mock-class file-name) ".h"))))
-
-(defun bake-get-mock-source (file-name mock-path)
-  (let ((moduledir (bake-get-moduledir)))
-    (file-name-concat moduledir
-                      mock-path
-                      "src"
-                      (file-relative-name
-                       (file-name-directory file-name)
-                       (file-name-concat moduledir "include"))
-                      (concat (get-mock-class file-name) ".cpp"))))
-
-(defun bake-mock-current-interface (mock-path)
-  (interactive "sMock path: ")
-  (cxx-genmock-interface
-   (buffer-file-name)
-   (bake-get-mock-header (buffer-file-name) mock-path)))
-
-(defun bake-mock-current-singleton (mock-path)
-  (interactive "sMock path: ")
-  (cxx-genmock-singleton
-   (buffer-file-name)
-   (bake-get-mock-header (buffer-file-name) mock-path)
-   (bake-get-mock-source (buffer-file-name) mock-path)))
 
 ;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
 ;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
