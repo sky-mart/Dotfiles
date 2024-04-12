@@ -407,9 +407,12 @@
       :hook
       (c++-mode . eglot-ensure)
       (c-mode . eglot-ensure)
+      (python-mode . eglot-ensure)
+      (rust-mode . eglot-ensure)
       :config
       (add-to-list 'eglot-server-programs
-                   '((c++-mode c-mode) . ("clangd" "--query-driver=/home/vladislav-agievich/.esr/diab5.9.4.8/LINUX386/bin/dcc"))))
+                   '((c++-mode c-mode) . ("clangd"))
+                   '((rust-ts-mode rust-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
 
   (use-package company
     :config
@@ -432,16 +435,16 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; requires python packages python-lsp-server and debugpy
 
-  (use-package python-mode
-    :hook
-    (python-mode . lsp-deferred)
-    :custom
-    ((python-shell-interpreter "python3")
-    (lsp-pylsp-plugins-pydocstyle-enabled nil)
-    (dap-python-executable "python3")
-    (dap-python-debugger 'debugpy))
-    :config
-    (require 'dap-python))
+  ;; (use-package python-mode
+  ;;   :hook
+  ;;   (python-mode . lsp-deferred)
+  ;;   :custom
+  ;;   ((python-shell-interpreter "python3")
+  ;;   (lsp-pylsp-plugins-pydocstyle-enabled nil)
+  ;;   (dap-python-executable "python3")
+  ;;   (dap-python-debugger 'debugpy))
+  ;;   :config
+  ;;   (require 'dap-python))
 
   (use-package auto-virtualenv
     :init
@@ -474,7 +477,7 @@
     (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
     )
 
-  (add-hook 'c++-mode-hook 'mart/c++-mode-hook)
+(add-hook 'c++-mode-hook 'mart/c++-mode-hook)
 
   ;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
 
@@ -490,6 +493,49 @@
 (add-hook 'ruby-mode-hook 'lsp-deferred)
 
 (setenv "GEM_HOME" (format "%s/.local/gem" (getenv "HOME")))
+#+end_src
+
+* Debugging
+My custom debugging mode to run commands and more
+#+begin_src emacs-lisp :tangle yes
+(make-variable-buffer-local
+ (defvar mart-dbg-mode nil
+   "Toggle mart-dbg-mode."))
+
+(defvar mart-dbg-mode-map (make-sparse-keymap)
+  "The keymap for mart-dbg-mode")
+
+;; Define a key in the keymap
+(define-key mart-dbg-mode-map (kbd "<f5>") 'gud-cont)
+(define-key mart-dbg-mode-map (kbd "<f6>") 'gud-next)
+(define-key mart-dbg-mode-map (kbd "S-<f6>") 'gud-until)
+(define-key mart-dbg-mode-map (kbd "<f7>") 'gud-step)
+(define-key mart-dbg-mode-map (kbd "<f8>") 'gud-break)
+
+
+(add-to-list 'minor-mode-alist '(mart-dbg-mode " mart"))
+(add-to-list 'minor-mode-map-alist (cons 'mart-dbg-mode mart-dbg-mode-map))
+
+(defun mart-dbg-mode (&optional ARG)
+  (interactive (list 'toggle))
+  (setq mart-dbg-mode
+        (if (eq ARG 'toggle)
+            (not mart-dbg-mode)
+          (> ARG 0)))
+
+  (if mart-dbg-mode
+      (message "mart-dbg-mode activated!")
+    (message "mart-dbg-mode deactivated!")))
+
+;; Uncomment when mode enabling works fine
+;; (add-hook 'gud-mode-hook 'mart-dbg-mode)
+
+(defun arm-gdb (executable)
+  (interactive "sExecutable: ")
+  (start-process-shell-command "OpenOCD" "*openocd*" "openocd -f board/stm32f3discovery.cfg")
+  (gdb (format "arm-none-eabi-gdb -i=mi -ex \"target remote :3333\" -ex \"monitor reset halt\" %s" executable)))
+#+end_src
+
 #+end_src
 
 * Org
