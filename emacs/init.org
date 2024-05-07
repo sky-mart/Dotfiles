@@ -429,6 +429,8 @@
   (add-to-list 'company-backends 'company-yasnippet))
 
 (use-package yasnippet-snippets)
+
+(use-package bazel)
 #+END_SRC
 
 ** Python
@@ -603,6 +605,13 @@ My custom debugging mode to run commands and more
                               (interactive)
                               (dired org-directory)))
 
+;; requires pandoc
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "pandoc"))
+
+(use-package yaml-mode)
 #+end_src
 * PlantUML
 #+begin_src emacs-lisp :tangle yes
