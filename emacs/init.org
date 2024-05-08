@@ -113,6 +113,10 @@
 
 (global-set-key (kbd "<f3>") 'window-configuration-to-register)
 (global-set-key (kbd "M-<f3>") 'jump-to-register)
+
+(global-set-key
+ (kbd "M-\\")
+ (lambda () (interactive) (find-file "~/Dotfiles/emacs/init.org")))
 #+END_SRC
 
 * Package setup
