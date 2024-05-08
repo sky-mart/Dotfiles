@@ -180,6 +180,8 @@
   ;; To capitalize or un-capitalize word use Alt+c and Alt+l
   (global-set-key (kbd "M-u") 'upcase-dwim)   ;; Alt+u upcase
   (global-set-key (kbd "M-l") 'downcase-dwim) ;; Alt-l lowercase
+
+(use-package hydra)
 #+END_SRC
 
 * Help
@@ -601,15 +603,24 @@ My custom debugging mode to run commands and more
       org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
       )
 
-(global-set-key (kbd "C-`") (lambda ()
-                              (interactive)
-                              (dired org-directory)))
+(defun open-note (exact-file)
+  (find-file (file-name-concat org-directory exact-file)))
+
+(global-set-key
+ (kbd "C-`")
+ (defhydra notes-launcher (:color blue)
+   "Open notes"
+   ("d" (open-note "Diary.org") "Diary")
+   ("n" (open-note "Notes.org") "Notes")
+   ("t" (open-note "Todo.org") "Todo")
+   ("s" (open-note "Stats.org") "Stats")))
 
 ;; requires pandoc
 (use-package markdown-mode
   :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "pandoc"))
+
 
 (use-package yaml-mode)
 #+end_src
