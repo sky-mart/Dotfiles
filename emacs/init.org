@@ -256,9 +256,6 @@
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))
     ))
 
-<<<<<<< HEAD
-  (winner-mode 1) ;; Window configurations
-
 ;; File tree
 (use-package neotree
   :config
@@ -276,9 +273,8 @@
   (setq neo-theme (if (display-graphic-p) 'nerd 'arrow))
   (setq neo-hidden-regexp-list '("venv" "\\.pyc$" "~$" "\\.git" "__pycache__" ".DS_Store"))
   (global-set-key (kbd "s-B") 'neotree-toggle))           ;; Cmd+Shift+b toggle tree
-=======
+
 (winner-mode 1) ;; Window configurations
->>>>>>> a50d52b (Format init.org)
 #+END_SRC
 
 * Completion and search
@@ -379,34 +375,14 @@
   (switch-to-buffer "*compilation*")
   (end-of-buffer))
 
-<<<<<<< HEAD
-  ;; Project management
-  (use-package projectile
-    :diminish projectile-mode
-    :config
-     (add-to-list 'projectile-project-root-files "Project.meta")
-    :custom
-    ((projectile-completion-system 'ivy)
-     (projectile-globally-ignored-directories ".cache"))
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :bind
-    (("C-S-f" . mart/rg-no-test-and-mock)
-     :map projectile-command-map
-     ("c" . mart/projectile-compile-and-scroll)
-     ("L" . mart/projectile-install-and-scroll))
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    ;; (when (file-directory-p "~/Projects")
-      ;; (setq projectile-project-search-path '("~/Projects")))
-    (setq projectile-switch-project-action 'projectile-dired))
-=======
 ;; Project management
 (use-package projectile
   :diminish projectile-mode
   :config
   (add-to-list 'projectile-project-root-files "Project.meta")
-  :custom (projectile-completion-system 'ivy)
+  :custom
+    ((projectile-completion-system 'ivy)
+     (projectile-globally-ignored-directories ".cache"))
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :bind
@@ -419,7 +395,6 @@
   ;; (when (file-directory-p "~/Projects")
   ;; (setq projectile-project-search-path '("~/Projects")))
   (setq projectile-switch-project-action 'projectile-dired))
->>>>>>> a50d52b (Format init.org)
 
 (use-package counsel-projectile
   :bind
