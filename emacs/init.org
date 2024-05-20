@@ -12,19 +12,19 @@
 
 * Basic UI
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; User Interface
-  (setq inhibit-startup-message t)
+;; User Interface
+(setq inhibit-startup-message t)
 
-  (scroll-bar-mode -1) ; Disable visible scrollbar
-  (tool-bar-mode -1)   ; Disable the toolbar
-  ;; (tooltip-mode -1)    ; Disable tooltips
-  (set-fringe-mode 10) ; Give some breathing room
-  ;; (menu-bar-mode -1)   ; Disable the menubar
+(scroll-bar-mode -1) ; Disable visible scrollbar
+(tool-bar-mode -1)   ; Disable the toolbar
+;; (tooltip-mode -1)    ; Disable tooltips
+(set-fringe-mode 10) ; Give some breathing room
+;; (menu-bar-mode -1)   ; Disable the menubar
 
-  ;; (set-face-attribute 'default nil :font "Fira Code
+;; (set-face-attribute 'default nil :font "Fira Code
 
-  ;; Font size 13.5 pt
-  ;; (set-face-attribute 'default nil :height 135)
+;; Font size 13.5 pt
+;; (set-face-attribute 'default nil :height 135)
 #+END_SRC
 
 * Behavior
@@ -123,139 +123,140 @@
 
 * Package setup
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Initialize package sources
-  (require 'package)
+;; Initialize package sources
+(require 'package)
 
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("gnu" . "https://elpa.gnu.org/packages/")
-                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("gnu" . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
-  ;;(unless package-archive-contents
-    ;;(package-refresh-contents))
+;;(unless package-archive-contents
+;;(package-refresh-contents))
 
-    ;; Initialize use-package on non-Linux platforms
-  (unless (package-installed-p 'use-package)
-     (package-install 'use-package))
+;; Initialize use-package on non-Linux platforms
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 
-  (require 'use-package)
-  (setq use-package-always-ensure t)
+(require 'use-package)
+(setq use-package-always-ensure t)
 
-  ;; Try package without installation
-  (use-package try)
+;; Try package without installation
+(use-package try)
 #+END_SRC
 
 * General purpose packages
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Emacs bindings with the russian keyboard
-  (use-package reverse-im
-    :config
-    (reverse-im-activate "russian-computer"))
+;; Emacs bindings with the russian keyboard
+(use-package reverse-im
+  :config
+  (reverse-im-activate "russian-computer"))
 
-  ;; enable Mac OS X path
-  (use-package exec-path-from-shell
-    :config
-    (exec-path-from-shell-initialize))
+;; enable Mac OS X path
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
 
-  ;; We need Emacs kill ring and system clipboard to be independent. Simpleclip is the solution to that.
-  ;; (use-package simpleclip
-  ;;   :config
-  ;;   (simpleclip-mode 1))
+;; We need Emacs kill ring and system clipboard to be independent. Simpleclip is the solution to that.
+;; (use-package simpleclip
+;;   :config
+;;   (simpleclip-mode 1))
 
-  ;; Linear undo and redo.
-  (use-package undo-fu
-    :bind
-    (("C-z" . undo-fu-only-undo)
-     ("C-S-z" . undo-fu-only-redo)))
+;; Linear undo and redo.
+(use-package undo-fu
+  :bind
+  (("C-z" . undo-fu-only-undo)
+   ("C-S-z" . undo-fu-only-redo)))
 
-  (use-package smex)  ;; show recent commands when invoking Alt-x (or Cmd+Shift+p)
+(use-package smex)  ;; show recent commands when invoking Alt-x (or Cmd+Shift+p)
 
-  ;; Multiple cursors. Similar to Sublime or VS Code.
-  (use-package multiple-cursors
-    :bind
-    (("M-3" . mc/mark-next-like-this)
-     ("M-4" . mc/edit-beginnings-of-lines))
-    :config
-    (setq mc/always-run-for-all 1)
-    (define-key mc/keymap (kbd "<return>") nil))
+;; Multiple cursors. Similar to Sublime or VS Code.
+(use-package multiple-cursors
+  :bind
+  (("M-3" . mc/mark-next-like-this)
+   ("M-4" . mc/edit-beginnings-of-lines))
+  :config
+  (setq mc/always-run-for-all 1)
+  (define-key mc/keymap (kbd "<return>") nil))
 
-  (use-package move-text
-    :config
-    (move-text-default-bindings))
+(use-package move-text
+  :config
+  (move-text-default-bindings))
 
-  ;; Upcase and lowercase word or region, if selected.
-  ;; To capitalize or un-capitalize word use Alt+c and Alt+l
-  (global-set-key (kbd "M-u") 'upcase-dwim)   ;; Alt+u upcase
-  (global-set-key (kbd "M-l") 'downcase-dwim) ;; Alt-l lowercase
+;; Upcase and lowercase word or region, if selected.
+;; To capitalize or un-capitalize word use Alt+c and Alt+l
+(global-set-key (kbd "M-u") 'upcase-dwim)   ;; Alt+u upcase
+(global-set-key (kbd "M-l") 'downcase-dwim) ;; Alt-l lowercase
 
 (use-package hydra)
 #+END_SRC
 
 * Help
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Interactive help with key bindings
-  (use-package which-key
-    :diminish which-key-mode
-    :config
-    (which-key-mode)
-    (setq which-key-idle-delay 0.5))
+;; Interactive help with key bindings
+(use-package which-key
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 0.5))
 
-  ;; Better help
-  (use-package helpful
-    :commands (helpful-callable helpful-variable helpful-command helpful-key)
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key))
+;; Better help
+(use-package helpful
+  :commands (helpful-callable helpful-variable helpful-command helpful-key)
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
 #+END_SRC
 
 * UI packages
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ; UI theme
-  (use-package doom-themes
-    :config
-    ;; Global settings (defaults)
-    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    ;; (load-theme 'doom-outrun-electric t)
-    (load-theme 'doom-nord t)
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config))
+;; UI theme
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;; (load-theme 'doom-outrun-electric t)
+  (load-theme 'doom-nord t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
-  ;; NOTE: The first time you load your configuration on a new machine, you'll
-  ;; need to run the following command interactively so that mode line icons
-  ;; display correctly:
-  ;;
-  ;; M-x all-the-icons-install-fonts
+;; NOTE: The first time you load your configuration on a new machine, you'll
+;; need to run the following command interactively so that mode line icons
+;; display correctly:
+;;
+;; M-x all-the-icons-install-fonts
 
-  (use-package all-the-icons)
+(use-package all-the-icons)
 
-  ;; Beautiful bottom line
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1))
+;; Beautiful bottom line
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
 
-  ;; Colorful brackets
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
+;; Colorful brackets
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
-  ;; replace switch-window mechanism
-  (use-package ace-window
-    :bind
-    (("C-x O" . other-frame)
-     ([remap other-window] . 'ace-window))
-    :init
-    (progn
-      (setq aw-scope 'global) ;; was frame
-      (custom-set-faces
-       '(aw-leading-char-face
-         ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-      ))
+;; replace switch-window mechanism
+(use-package ace-window
+  :bind
+  (("C-x O" . other-frame)
+   ([remap other-window] . 'ace-window))
+  :init
+  (progn
+    (setq aw-scope 'global) ;; was frame
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+    ))
 
+<<<<<<< HEAD
   (winner-mode 1) ;; Window configurations
 
 ;; File tree
@@ -275,90 +276,93 @@
   (setq neo-theme (if (display-graphic-p) 'nerd 'arrow))
   (setq neo-hidden-regexp-list '("venv" "\\.pyc$" "~$" "\\.git" "__pycache__" ".DS_Store"))
   (global-set-key (kbd "s-B") 'neotree-toggle))           ;; Cmd+Shift+b toggle tree
+=======
+(winner-mode 1) ;; Window configurations
+>>>>>>> a50d52b (Format init.org)
 #+END_SRC
 
 * Completion and search
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Completion mechanism
-  (use-package ivy
-    :diminish ivy-mode
-    :bind (("C-s" . swiper)
-           ("C-x b" . ivy-switch-buffer))
-    :config
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy)
-    (setq ivy-magic-slash-non-match-action nil))
+;; Completion mechanism
+(use-package ivy
+  :diminish ivy-mode
+  :bind (("C-s" . swiper)
+         ("C-x b" . ivy-switch-buffer))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-display-style 'fancy)
+  (setq ivy-magic-slash-non-match-action nil))
 
-  ;; Additional help
-  (use-package ivy-rich
-    :after ivy
-    :config
-    (ivy-rich-mode 1)
-    (setq ivy-rich-path-style 'abbrev))
+;; Additional help
+(use-package ivy-rich
+  :after ivy
+  :config
+  (ivy-rich-mode 1)
+  (setq ivy-rich-path-style 'abbrev))
 
-  ;; (use-package ivy-posframe
-  ;;   :ensure t
-  ;;   :delight
-  ;;   :custom
-  ;;   (ivy-posframe-parameters
-  ;;    '((left-fringe . 2)
-  ;;      (right-fringe . 2)
-  ;;      (internal-border-width . 2)))
-  ;;   (ivy-posframe-height-alist
-  ;;    '((swiper . 15)
-  ;;      (swiper-isearch . 15)
-  ;;      (t . 10)))
-  ;;   (ivy-posframe-display-functions-alist
-  ;;    '((complete-symbol . ivy-posframe-display-at-point)
-  ;;      (swiper . nil)
-  ;;      (swiper-isearch . nil)
-  ;;      (t . ivy-posframe-display-at-frame-center)))
-  ;;   :config
-  ;;   (ivy-posframe-mode 1))
+;; (use-package ivy-posframe
+;;   :ensure t
+;;   :delight
+;;   :custom
+;;   (ivy-posframe-parameters
+;;    '((left-fringe . 2)
+;;      (right-fringe . 2)
+;;      (internal-border-width . 2)))
+;;   (ivy-posframe-height-alist
+;;    '((swiper . 15)
+;;      (swiper-isearch . 15)
+;;      (t . 10)))
+;;   (ivy-posframe-display-functions-alist
+;;    '((complete-symbol . ivy-posframe-display-at-point)
+;;      (swiper . nil)
+;;      (swiper-isearch . nil)
+;;      (t . ivy-posframe-display-at-frame-center)))
+;;   :config
+;;   (ivy-posframe-mode 1))
 
-  ;; Part of ivy?
-  (use-package counsel
-    :bind (("M-x" . counsel-M-x))
-    :config
-    (counsel-mode 1))
+;; Part of ivy?
+(use-package counsel
+  :bind (("M-x" . counsel-M-x))
+  :config
+  (counsel-mode 1))
 
-  (use-package flx)   ;; enable fuzzy matching
+(use-package flx)   ;; enable fuzzy matching
 
 ;; enable avy for quick navigation
 (use-package avy
   :bind (("C-o" . avy-goto-char)))
 
-  (use-package fzf
-    :bind
-    ;; Don't forget to set keybinds!
-    :config
-    (setq
-      fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
-      fzf/executable "fzf"
-      fzf/git-grep-args "-i --line-number %s"
-      ;; command used for `fzf-grep-*` functions
-      ;; example usage for ripgrep:
-      ;; fzf/grep-command "rg --no-heading -nH"
-      fzf/grep-command "grep -nrH"
-      ;; If nil, the fzf buffer will appear at the top of the window
-      fzf/position-bottom t
-      fzf/window-height 15))
+(use-package fzf
+  :bind
+  ;; Don't forget to set keybinds!
+  :config
+  (setq
+   fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+   fzf/executable "fzf"
+   fzf/git-grep-args "-i --line-number %s"
+   ;; command used for `fzf-grep-*` functions
+   ;; example usage for ripgrep:
+   ;; fzf/grep-command "rg --no-heading -nH"
+   fzf/grep-command "grep -nrH"
+   ;; If nil, the fzf buffer will appear at the top of the window
+   fzf/position-bottom t
+   fzf/window-height 15))
 #+END_SRC
 
 * Project management
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun mart/rg-project (pattern args)
-    (interactive "sPattern: \nsArguments: ")
-    (ripgrep-regexp pattern (projectile-project-root) (list args)))
+(defun mart/rg-project (pattern args)
+  (interactive "sPattern: \nsArguments: ")
+  (ripgrep-regexp pattern (projectile-project-root) (list args)))
 
-  (defun mart/rg-only-sources (pattern)
-    (interactive "sPattern: ")
-    (mart/rg-project pattern  "-th -tc -tcpp"))
+(defun mart/rg-only-sources (pattern)
+  (interactive "sPattern: ")
+  (mart/rg-project pattern  "-th -tc -tcpp"))
 
-  (defun mart/rg-no-test-and-mock (pattern)
-    (interactive "sPattern: ")
-    (mart/rg-project pattern "-th -tc -tcpp -g '!*test*' -g '!*mock*'"))
+(defun mart/rg-no-test-and-mock (pattern)
+  (interactive "sPattern: ")
+  (mart/rg-project pattern "-th -tc -tcpp -g '!*test*' -g '!*mock*'"))
 
 (defun mart/projectile-compile-and-scroll (arg)
   (interactive "P")
@@ -372,6 +376,7 @@
   (switch-to-buffer "*compilation*")
   (end-of-buffer))
 
+<<<<<<< HEAD
   ;; Project management
   (use-package projectile
     :diminish projectile-mode
@@ -392,64 +397,84 @@
     ;; (when (file-directory-p "~/Projects")
       ;; (setq projectile-project-search-path '("~/Projects")))
     (setq projectile-switch-project-action 'projectile-dired))
+=======
+;; Project management
+(use-package projectile
+  :diminish projectile-mode
+  :config
+  (add-to-list 'projectile-project-root-files "Project.meta")
+  :custom (projectile-completion-system 'ivy)
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :bind
+  (("C-S-f" . mart/rg-no-test-and-mock)
+   :map projectile-command-map
+   ("c" . mart/projectile-compile-and-scroll)
+   ("L" . mart/projectile-install-and-scroll))
+  :init
+  ;; NOTE: Set this to the folder where you keep your Git repos!
+  ;; (when (file-directory-p "~/Projects")
+  ;; (setq projectile-project-search-path '("~/Projects")))
+  (setq projectile-switch-project-action 'projectile-dired))
+>>>>>>> a50d52b (Format init.org)
 
-  (use-package counsel-projectile
-    :bind
-    (("M-o" . counsel-projectile-find-file))
-    :config (counsel-projectile-mode))
+(use-package counsel-projectile
+  :bind
+  (("M-o" . counsel-projectile-find-file))
+  :config (counsel-projectile-mode))
 
-  (use-package dashboard
-    :config
-    (setq dashboard-items '((projects . 5)
-                            (recents  . 5)))
-    (dashboard-setup-startup-hook))
+(use-package dashboard
+  :config
+  (setq dashboard-items '((projects . 5)
+                          (recents  . 5)))
+  (dashboard-setup-startup-hook))
 #+END_SRC
 
 * Git
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package transient)
+(use-package transient)
 
-  (transient-define-suffix magit-push-to-gerrit ()
-    "Push to Gerrit"
-    :description "to gerrit"
-    (interactive)
-    (magit-push-refspecs "origin" "HEAD:refs/for/master" nil))
+(transient-define-suffix magit-push-to-gerrit ()
+  "Push to Gerrit"
+  :description "to gerrit"
+  (interactive)
+  (magit-push-refspecs "origin" "HEAD:refs/for/master" nil))
 
-  (transient-define-suffix magit-pull-from-master ()
-    "Pull from master"
-    :description "master"
-    (interactive)
-    (magit-pull-branch "origin/master" (magit-pull-arguments)))
+(transient-define-suffix magit-pull-from-master ()
+  "Pull from master"
+  :description "master"
+  (interactive)
+  (magit-pull-branch "origin/master" (magit-pull-arguments)))
 
-  (use-package magit
-    :config
-    (transient-append-suffix 'magit-push "t"
-      '("g" magit-push-to-gerrit))
-    (transient-append-suffix 'magit-pull "e"
-      '("M" magit-pull-from-master)))
+(use-package magit
+  :config
+  (transient-append-suffix 'magit-push "t"
+    '("g" magit-push-to-gerrit))
+  (transient-append-suffix 'magit-pull "e"
+    '("M" magit-pull-from-master)))
 #+END_SRC
 
 * Development
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package eglot
-      :hook
-      (c++-mode . eglot-ensure)
-      (c-mode . eglot-ensure)
-      (python-mode . eglot-ensure)
-      (rust-mode . eglot-ensure)
-      :config
-      (add-to-list 'eglot-server-programs
-                   '((c++-mode c-mode) . ("clangd"))
-                   '((rust-ts-mode rust-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
+(use-package eglot
+  :hook
+  (c++-mode . eglot-ensure)
+  (c-mode . eglot-ensure)
+  (python-mode . eglot-ensure)
+  (rust-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+               '((c++-mode c-mode) . ("clangd"))
+               '((rust-ts-mode rust-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
 
-  (use-package company
-    :config
-    (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 1)
-    (global-company-mode t))
+(use-package company
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1)
+  (global-company-mode t))
 
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (use-package yasnippet
   :config
@@ -463,58 +488,58 @@
 
 ** Python
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; requires python packages python-lsp-server and debugpy
+;; requires python packages python-lsp-server and debugpy
 
-  ;; (use-package python-mode
-  ;;   :hook
-  ;;   (python-mode . lsp-deferred)
-  ;;   :custom
-  ;;   ((python-shell-interpreter "python3")
-  ;;   (lsp-pylsp-plugins-pydocstyle-enabled nil)
-  ;;   (dap-python-executable "python3")
-  ;;   (dap-python-debugger 'debugpy))
-  ;;   :config
-  ;;   (require 'dap-python))
+;; (use-package python-mode
+;;   :hook
+;;   (python-mode . lsp-deferred)
+;;   :custom
+;;   ((python-shell-interpreter "python3")
+;;   (lsp-pylsp-plugins-pydocstyle-enabled nil)
+;;   (dap-python-executable "python3")
+;;   (dap-python-debugger 'debugpy))
+;;   :config
+;;   (require 'dap-python))
 
-  (use-package auto-virtualenv
-    :init
-    (use-package pyvenv
-      :config
-      (setenv "WORKON_HOME" "/home/vlad/Documents/Dev/Languages/Python")
-      (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] "))))
+(use-package auto-virtualenv
+  :init
+  (use-package pyvenv
     :config
-    (add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
-    (add-hook 'projectile-after-switch-project-hook 'auto-virtualenv-set-virtualenv)  ;; If using projectile
-    )
+    (setenv "WORKON_HOME" "/home/vlad/Documents/Dev/Languages/Python")
+    (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] "))))
+  :config
+  (add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
+  (add-hook 'projectile-after-switch-project-hook 'auto-virtualenv-set-virtualenv)  ;; If using projectile
+  )
 #+END_SRC
 
 ** C++
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; formatting
-  (use-package clang-format+
-    :bind (("M-n" . clang-format-region)))
+;; formatting
+(use-package clang-format+
+  :bind (("M-n" . clang-format-region)))
 
-  ;; for pure C projects remove in .dir_locals
-  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-  (c-set-offset 'innamespace '0)
-  ;; (electric-pair-mode)
+;; for pure C projects remove in .dir_locals
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(c-set-offset 'innamespace '0)
+;; (electric-pair-mode)
 
-  (load-file "~/.emacs.d/esr.el")
+(load-file "~/.emacs.d/esr.el")
 
-  (defun mart/c++-mode-hook ()
-    "Custom key bindings for C++ mode."
-    (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
-    (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
-    )
+(defun mart/c++-mode-hook ()
+  "Custom key bindings for C++ mode."
+  (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+  (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+  )
 
 (add-hook 'c++-mode-hook 'mart/c++-mode-hook)
 
-  ;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
+;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
 
-  ;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
+;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
 
-  ;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
-  ;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
+;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
+;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
 #+END_SRC
 
 ** Ruby
@@ -652,8 +677,8 @@ My custom debugging mode to run commands and more
 #+end_src
 * PlantUML
 #+begin_src emacs-lisp :tangle yes
-  (use-package plantuml-mode
-    :config
-    (setq plantuml-jar-path "/home/vlad/.local/bin/plantuml-1.2023.5.jar")
-    (setq plantuml-default-exec-mode 'jar))
+(use-package plantuml-mode
+  :config
+  (setq plantuml-jar-path "/home/vlad/.local/bin/plantuml-1.2023.5.jar")
+  (setq plantuml-default-exec-mode 'jar))
 #+end_src
