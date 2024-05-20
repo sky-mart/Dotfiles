@@ -333,6 +333,9 @@
 (use-package avy
   :bind (("C-o" . avy-goto-char)))
 
+;; better grep
+(use-package ripgrep)
+
 (use-package fzf
   :bind
   ;; Don't forget to set keybinds!
