@@ -416,20 +416,20 @@
   "Push to Gerrit"
   :description "to gerrit"
   (interactive)
-  (magit-push-refspecs "origin" "HEAD:refs/for/master" nil))
+  (magit-push-refspecs "origin" (format "HEAD:refs/for/%s" (magit-main-branch)) nil))
 
-(transient-define-suffix magit-pull-from-master ()
+(transient-define-suffix magit-pull-from-main ()
   "Pull from master"
-  :description "master"
+  :description "main"
   (interactive)
-  (magit-pull-branch "origin/master" (magit-pull-arguments)))
+  (magit-pull-branch (format "origin/%s" (magit-main-branch)) (magit-pull-arguments)))
 
 (use-package magit
   :config
   (transient-append-suffix 'magit-push "t"
     '("g" magit-push-to-gerrit))
   (transient-append-suffix 'magit-pull "e"
-    '("M" magit-pull-from-master)))
+    '("M" magit-pull-from-main)))
 #+END_SRC
 
 * Development
