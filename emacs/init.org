@@ -640,9 +640,16 @@ My custom debugging mode to run commands and more
  (defhydra notes-launcher (:color blue)
    "Open notes"
    ("d" (open-note "Diary.org") "Diary")
+   ("в" (open-note "Diary.org") "Diary") ;; cyrillic
    ("n" (open-note "Notes.org") "Notes")
+   ("т" (open-note "Notes.org") "Notes") ;; cyrillic
    ("t" (open-note "Todo.org") "Todo")
-   ("s" (open-note "Stats.org") "Stats")))
+   ("е" (open-note "Todo.org") "Todo") ;; cyrillic
+   ("s" (open-note "Stats.org") "Stats")
+   ("ы" (open-note "Stats.org") "Stats") ;; cyrillic
+   ("e" (open-note "Expences.org") "Expences")
+   ("у" (open-note "Expences.org") "Expences") ;; cyrillic
+))
 
 ;; requires pandoc
 (use-package markdown-mode
