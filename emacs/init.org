@@ -98,6 +98,8 @@
 (global-unset-key (kbd "<down-mouse-8>"))
 (global-unset-key (kbd "<down-mouse-9>"))
 
+(global-unset-key (kbd "M-<down-mouse-1>"))
+
 (defun display-ansi-colors ()
   (interactive)
   (let ((inhibit-read-only t))
@@ -113,8 +115,8 @@
                                 (split-window-right)
                                 (other-window 1)))
 
-(global-set-key (kbd "<f3>") 'window-configuration-to-register)
-(global-set-key (kbd "M-<f3>") 'jump-to-register)
+(global-set-key (kbd "<f2>") 'window-configuration-to-register)
+(global-set-key (kbd "M-<f2>") 'jump-to-register)
 
 (global-set-key
  (kbd "M-\\")
@@ -500,6 +502,7 @@
 ;; for pure C projects remove in .dir_locals
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (c-set-offset 'innamespace '0)
+(c-set-offset 'substatement-open '0)
 ;; (electric-pair-mode)
 
 (load-file "~/.emacs.d/esr.el")
@@ -608,6 +611,31 @@ My custom debugging mode to run commands and more
   (gdb-kill)
   (openocd-kill)
   (message "Stopped debugging"))
+
+(defun bazel-debug-at-point ()
+  "Run the test case at point."
+  (interactive)
+  (let* ((source-file (or buffer-file-name
+                          (user-error "Buffer doesn’t visit a file")))
+         (root (or (bazel--workspace-root source-file)
+                   (user-error "File is not in a Bazel workspace")))
+         (directory (or (bazel--package-directory source-file root)
+                        (user-error "File is not in a Bazel package")))
+         (package (or (bazel--package-name directory root)
+                      (user-error "File is not in a Bazel package")))
+         (build-file (or (bazel--locate-build-file directory)
+                         (user-error "No BUILD file found")))
+         (relative-file (file-relative-name source-file directory))
+         (case-fold-file (file-name-case-insensitive-p source-file))
+         (rule (or (bazel--consuming-rule build-file relative-file
+                                          case-fold-file :only-tests)
+                   (user-error "No rule for file %s found" relative-file)))
+         (test-executable (file-name-concat root "bazel-bin" package rule))
+         (name
+          (or (run-hook-with-args-until-success 'bazel-test-at-point-functions)
+              (user-error "Point is not on a test case"))))
+    (gdb (format "gdb -i=mi --cd=%s %s" root test-executable))))
+;;  nil)
 #+end_src
 
 #+end_src
