@@ -408,6 +408,26 @@
   (setq dashboard-items '((projects . 5)
                           (recents  . 5)))
   (dashboard-setup-startup-hook))
+
+(use-package tramp
+  :custom
+  ;; (tramp-auto-save-directory "~/.emacs.d/tramp-autosave")
+  (tramp-use-scp-direct-remote-copying t)
+  (tramp-histfile-override t)           ; sets both HISTFILESIZE
+                                        ; and HISTSIZE to 0
+  (tramp-verbose 1)                     ; errors only (no warnings)
+  (remote-file-name-inhibit-locks t)    ; different emacs sessions are not
+                                        ; modifying the same remote file
+  (remote-file-name-inhibit-cache nil)  ; remote files are not modified
+                                        ; outside of emacs
+)
+
+;; Speed up TRAMP
+(setq projectile-mode-line "Projectile")
+(setq vc-ignore-dir-regexp
+      (format "%s\\|%s"
+                    vc-ignore-dir-regexp
+                    tramp-file-name-regexp))
 #+END_SRC
 
 * Git
