@@ -17,6 +17,9 @@ EOF
 chmod 600 /home/$LOCAL_USER/.davfs2/secrets
 chown $LOCAL_USER:$LOCAL_USER /home/$LOCAL_USER/.davfs2/secrets
 
+mkdir /home/$LOCAL_USER/.davfs2/certs
+cp notes.crt /home/$LOCAL_USER/.davfs2/certs/
+
 # fill davfs2-conf
 cat << EOF >> /home/$LOCAL_USER/.davfs2/davfs2.conf
 [/home/$LOCAL_USER/Documents/Notes]
