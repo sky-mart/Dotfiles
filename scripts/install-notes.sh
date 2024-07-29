@@ -19,6 +19,8 @@ chown $LOCAL_USER:$LOCAL_USER /home/$LOCAL_USER/.davfs2/secrets
 
 mkdir /home/$LOCAL_USER/.davfs2/certs
 cp notes.crt /home/$LOCAL_USER/.davfs2/certs/
+сhmod 600 /home/$LOCAL_USER/.davfs2/certs/notes.crt
+chown $LOCAL_USER:$LOCAL_USER /home/$LOCAL_USER/.davfs2/certs/notes.crt
 
 # fill davfs2-conf
 cat << EOF >> /home/$LOCAL_USER/.davfs2/davfs2.conf
