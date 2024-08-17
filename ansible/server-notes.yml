@@ -1,0 +1,8 @@
+- name: Server notes
+  hosts: servers
+  tasks:
+    - name: Setup backups
+      ansible.builtin.cron:
+        name: DAV notes backup
+        special_time: daily
+        job: "tar -cf ~/projects/dav-notes/backups/$(date +%Y-%m-%d).tar ~/projects/dav-notes/data"
