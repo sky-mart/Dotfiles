@@ -1,0 +1,31 @@
+- name: Setup my desktop
+  hosts: all
+  tasks:
+    - name: Install software
+      become: yes
+      ansible.builtin.apt:
+        update_cache: true
+        pkg:
+          - git
+          - nitrogen
+          - kitty
+          - rofi
+          - vim
+
+    - name: Install Qtile dependencies
+      become: yes
+      ansible.builtin.apt:
+        pkg:
+          - libpangocairo-1.0-0
+          - python3-pip
+          - python3-xcffib
+          - python3-cairocffi
+
+    - name: Install Qtile
+      ansible.builtin.pip:
+        name: qtile
+
+    - name: Download my dotfiles
+      ansible.builtin.git:
+        repo: "https://github.com/sky-mart/Dotfiles.git"
+        dest: ~/Dotfiles
