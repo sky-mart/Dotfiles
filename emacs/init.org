@@ -456,16 +456,23 @@
 
 * Development
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package eglot
+;; (use-package eglot
+  ;; :hook
+  ;; (c++-mode . eglot-ensure)
+  ;; (c-mode . eglot-ensure)
+  ;; (python-mode . eglot-ensure)
+  ;; (rust-mode . eglot-ensure)
+  ;; :config
+  ;; (add-to-list 'eglot-server-programs
+               ;; '((c++-mode c-mode) . ("clangd"))
+               ;; '((rust-ts-mode rust-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
+
+(use-package lsp-mode
   :hook
-  (c++-mode . eglot-ensure)
-  (c-mode . eglot-ensure)
-  (python-mode . eglot-ensure)
-  (rust-mode . eglot-ensure)
-  :config
-  (add-to-list 'eglot-server-programs
-               '((c++-mode c-mode) . ("clangd"))
-               '((rust-ts-mode rust-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
+  (c++-mode . lsp-deferred)
+  (c-mode . lsp-deferred)
+  (python-mode . lsp-deferred)
+  (rust-mode . lsp-deferred))
 
 (use-package company
   :config
