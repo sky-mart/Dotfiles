@@ -1,0 +1,29 @@
+- name: Install zsh and oh-my-zsh
+  hosts: all
+  vars:
+    the_user: "{{ ansible_user_id }}"
+  tasks:
+    - name: Install software
+      become: yes
+      ansible.builtin.apt:
+        name: zsh
+
+    - name: Change shell to zsh
+      become: yes
+      ansible.builtin.shell:
+        cmd: chsh --shell $(which zsh) {{ the_user }}
+
+    - name: Reset ssh connection
+      meta: reset_connection
+
+    - name: Make sure zsh is used
+      ansible.builtin.shell:
+        cmd: test "$SHELL" = "$(which zsh)"
+
+    - name: Download the installation script
+      ansible.builtin.shell:
+        cmd:
+
+    - name: Install oh-my-zsh
+      ansible.builtin.shell:
+        cmd: sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
