@@ -21,9 +21,15 @@
         cmd: test "$SHELL" = "$(which zsh)"
 
     - name: Download the installation script
-      ansible.builtin.shell:
-        cmd:
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: ~/install.sh
+        mode: '0555'
 
     - name: Install oh-my-zsh
       ansible.builtin.shell:
-        cmd: sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        cmd: sh ~/install.sh
+
+    - name: Remove the temporary file
+      ansible.builtin.shell:
+        cmd: rm ~/install.sh
