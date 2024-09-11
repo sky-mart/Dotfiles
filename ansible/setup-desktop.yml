@@ -55,3 +55,8 @@
       ansible.builtin.copy:
         src: ../rofi/nord.rasi
         dest: ~/.config/rofi/
+
+    - name: Copy wallpaper
+      ansible.builtin.copy:
+        src: ../wp.png
+        dest: ~/Pictures/
