@@ -25,7 +25,33 @@
       ansible.builtin.pip:
         name: qtile
 
-    - name: Download my dotfiles
-      ansible.builtin.git:
-        repo: "https://github.com/sky-mart/Dotfiles.git"
-        dest: ~/Dotfiles
+    - name: Copy qtile.desktop
+      become: yes
+      ansible.builtin.copy:
+        src: ../qtile/qtile.desktop
+        dest: /usr/share/xsessions/
+
+    - name: Copy qtile config
+      ansible.builtin.copy:
+        src: ../qtile/config.py
+        dest: ~/.config/qtile/
+
+    - name: Copy kitty config
+      ansible.builtin.copy:
+        src: ../kitty/kitty.conf
+        dest: ~/.config/kitty/
+
+    - name: Copy kitty theme
+      ansible.builtin.copy:
+        src: ../kitty/nord.conf
+        dest: ~/.config/kitty/
+
+    - name: Copy rofi config
+      ansible.builtin.copy:
+        src: ../rofi/config.rasi
+        dest: ~/.config/rofi/
+
+    - name: Copy rofi theme
+      ansible.builtin.copy:
+        src: ../rofi/nord.rasi
+        dest: ~/.config/rofi/

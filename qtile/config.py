@@ -69,7 +69,7 @@ def autostart():
 
 
 mod = "mod4"
-terminal = guess_terminal()
+terminal = "kitty"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -116,7 +116,7 @@ keys = [
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    # Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "space", lazy.spawn("rofi -show drun"), desc="Spawn a command using a prompt widget"),
     Key(["mod1"], "space", lazy.function(kbd_layout_mgr.set_previous), desc="Set next keyboard layout"),
     Key(["mod1", "shift"], "space", lazy.function(kbd_layout_mgr.set_next), desc="Set next keyboard layout"),
 ]
