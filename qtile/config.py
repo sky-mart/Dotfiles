@@ -65,7 +65,9 @@ kbd_layout_mgr = KbdLayoutManager(("us", "ru", "de"))
 def autostart():
     logger.warning("autostart")
     kbd_layout_mgr.set_keyboard_layout()
+    subprocess.Popen(["picom", "-b", "-c"])
     subprocess.Popen(["nitrogen", "--restore"])
+    subprocess.Popen(["emacs", "--daemon"])
 
 
 mod = "mod4"
