@@ -121,6 +121,11 @@ keys = [
     Key([mod], "space", lazy.spawn("rofi -show drun"), desc="Spawn a command using a prompt widget"),
     Key(["mod1"], "space", lazy.function(kbd_layout_mgr.set_previous), desc="Set next keyboard layout"),
     Key(["mod1", "shift"], "space", lazy.function(kbd_layout_mgr.set_next), desc="Set next keyboard layout"),
+
+    # Volume keys
+    Key(["mod1"], "F10", lazy.spawn("wpctl set-mute @DEFAULT_SINK@ toggle"), desc="Mute/unmute the sound"),
+    Key(["mod1"], "F11", lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%-"), desc="Make the sound queiter"),
+    Key(["mod1"], "F12", lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%+"), desc="Make the sound louder"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
@@ -207,6 +212,14 @@ screens = [
                 # widget.Systray(),
                 widget.KeyboardLayout(),
                 widget.Bluetooth(),
+                widget.Volume(
+                    check_mute_command="wpctl get-volume @DEFAULT_SINK@",
+                    check_mute_string="[MUTED]",
+                    get_volume_command="wpctl get-volume @DEFAULT_SINK@ | awk '{$2=$2 \"%\"; print}'",
+                    mute_command="wpctl set-mute @DEFAULT_SINK@ toggle",
+                    volume_down_command="wpctl set-volume @DEFAULT_SINK@ 5%-",
+                    volume_up_command="wpctl set-volume @DEFAULT_SINK@ 5%+",
+                ),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 widget.QuickExit(),
             ],
