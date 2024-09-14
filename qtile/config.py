@@ -137,7 +137,7 @@ for vt in range(1, 8):
     )
 
 
-groups = [Group(i) for i in "123"]
+groups = [Group(i) for i in "1234"]
 
 for i in groups:
     keys.extend(
@@ -164,7 +164,7 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4, margin=[5, 5, 5, 5]),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
@@ -180,9 +180,9 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
-    fontsize=12,
-    padding=3,
+    font="Fira Code",
+    fontsize=14,
+    padding=10,
 )
 extension_defaults = widget_defaults.copy()
 
@@ -206,6 +206,7 @@ screens = [
                 # widget.StatusNotifier(),
                 # widget.Systray(),
                 widget.KeyboardLayout(),
+                widget.Bluetooth(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 widget.QuickExit(),
             ],
