@@ -14,3 +14,9 @@ cp $DIR/kitty/* ~/.config/kitty
 
 mkdir ~/.config/rofi
 cp $DIR/rofi/* ~/.config/rofi
+
+mkdir ~/.config/qtile
+ln -s $DIR/qtile/config.py ~/.config/qtile/config.py
+
+mkdir ~/.config/picom
+ln -s $DIR/picom/picom.conf ~/.config/picom/picom.conf
