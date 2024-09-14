@@ -20,3 +20,6 @@ ln -s $DIR/qtile/config.py ~/.config/qtile/config.py
 
 mkdir ~/.config/picom
 ln -s $DIR/picom/picom.conf ~/.config/picom/picom.conf
+
+ln -s $DIR/scripts/autosart.sh ~/.local/bin/autostart.sh
+ln -s $DIR/scripts/shutdown.sh ~/.local/bin/shutdown.sh

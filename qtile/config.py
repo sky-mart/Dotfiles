@@ -30,6 +30,7 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
 
+import os
 import subprocess
 
 
@@ -61,14 +62,17 @@ class KbdLayoutManager:
 
 kbd_layout_mgr = KbdLayoutManager(("us", "ru", "de"))
 
-@hook.subscribe.startup
+@hook.subscribe.startup_once
 def autostart():
-    logger.warning("autostart")
+    script = os.path.expanduser("~/.local/bin/autostart.sh")
+    subprocess.run([script])
     kbd_layout_mgr.set_keyboard_layout()
-    subprocess.Popen(["picom", "-b", "-c"])
-    subprocess.Popen(["nitrogen", "--restore"])
-    subprocess.Popen(["emacs", "--daemon"])
 
+
+@hook.subscribe.shutdown
+def shutdown():
+    script = os.path.expanduser("~/.local/bin/shutdown.sh")
+    subprocess.run([script])
 
 mod = "mod4"
 terminal = "kitty"
@@ -219,6 +223,11 @@ screens = [
                     mute_command="wpctl set-mute @DEFAULT_SINK@ toggle",
                     volume_down_command="wpctl set-volume @DEFAULT_SINK@ 5%-",
                     volume_up_command="wpctl set-volume @DEFAULT_SINK@ 5%+",
+                    mouse_callbacks={
+                        "Button1": lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%+"),
+                        "Button2": lazy.spawn("wpctl set-mute @DEFAULT_SINK@ toggle"),
+                        "Button3": lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%-"),
+                    }
                 ),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 widget.QuickExit(),
