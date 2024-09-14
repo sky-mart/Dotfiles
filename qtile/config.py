@@ -127,9 +127,9 @@ keys = [
     Key(["mod1", "shift"], "space", lazy.function(kbd_layout_mgr.set_next), desc="Set next keyboard layout"),
 
     # Volume keys
-    Key(["mod1"], "F10", lazy.spawn("wpctl set-mute @DEFAULT_SINK@ toggle"), desc="Mute/unmute the sound"),
-    Key(["mod1"], "F11", lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%-"), desc="Make the sound queiter"),
-    Key(["mod1"], "F12", lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%+"), desc="Make the sound louder"),
+    Key(["mod1"], "F10", lazy.widget["volume"].mute(), desc="Mute/unmute the sound"),
+    Key(["mod1"], "F11", lazy.widget["volume"].decrease_vol(), desc="Make the sound queiter"),
+    Key(["mod1"], "F12", lazy.widget["volume"].increase_vol(), desc="Make the sound louder"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
@@ -197,7 +197,7 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
                 widget.CurrentLayout(),
                 widget.GroupBox(),
@@ -215,6 +215,7 @@ screens = [
                 # widget.StatusNotifier(),
                 # widget.Systray(),
                 widget.KeyboardLayout(),
+                # widget.Wlan(),
                 widget.Bluetooth(),
                 widget.Volume(
                     check_mute_command="wpctl get-volume @DEFAULT_SINK@",
@@ -224,12 +225,12 @@ screens = [
                     volume_down_command="wpctl set-volume @DEFAULT_SINK@ 5%-",
                     volume_up_command="wpctl set-volume @DEFAULT_SINK@ 5%+",
                     mouse_callbacks={
-                        "Button1": lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%+"),
-                        "Button2": lazy.spawn("wpctl set-mute @DEFAULT_SINK@ toggle"),
-                        "Button3": lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%-"),
+                        "Button1": lazy.widget["volume"].increase_vol(),
+                        "Button2": lazy.widget["volume"].mute(),
+                        "Button3": lazy.widget["volume"].decrease_vol(),
                     }
                 ),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                widget.Clock(format="%Y-%m-%d %a %H:%M"),
                 widget.QuickExit(),
             ],
             24,
