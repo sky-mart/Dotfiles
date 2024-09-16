@@ -29,44 +29,46 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
+from libqtile.command.base import expose_command
 
 import os
 import subprocess
 
 
-class KbdLayoutManager:
-    def __init__(self, layouts):
-        assert layouts
+class LatinAndNonLatinKbdLayout(widget.base.InLoopPollText):
+    def __init__(self, **config):
+        super().__init__(**config)
+        self.latin_index = 0
+        self.non_latin_index = 0
+        self.update_interval = 1
 
-        self.layouts = layouts
-        self.options = "ctrl:swapcaps"
-        self.current_index = 0
-        self.previous_index = (self.current_index + 1) % len(self.layouts)
+    def _configure(self, qtile, bar):
+        widget.base.InLoopPollText._configure(self, qtile, bar)
+        self._set_keyboard_layout()
 
-    def _xkbmap_args(self):
-        return ["setxkbmap", "-layout", self.layouts[self.current_index], "-option", self.options]
+    def _set_keyboard_layout(self):
+        args = ["setxkbmap", "-layout",
+                f"{self.latin_layouts[self.latin_index]},{self.non_latin_layouts[self.non_latin_index]}",
+                "-option", self.option]
+        subprocess.Popen(args)
 
-    def set_keyboard_layout(self):
-        logger.warning(f"Set keyboard layout {self.layouts[self.current_index]}")
-        subprocess.Popen(self._xkbmap_args())
+    def _get_keyboard_layout(self):
+        kbd_layout = subprocess.check_output(["xkblayout-state", "print", "%s"]).decode()
+        return kbd_layout[:2]
 
-    def set_previous(self, *args):
-        self.current_index, self.previous_index = self.previous_index, self.current_index
-        self.set_keyboard_layout()
+    @expose_command
+    def next_latin_layout(self):
+        self.latin_index = (self.latin_index + 1) % len(self.latin_layouts)
+        self._set_keyboard_layout()
 
-    def set_next(self, *args):
-        self.previous_index = self.current_index
-        self.current_index = (self.current_index + 1) % len(self.layouts)
-        self.set_keyboard_layout()
-
-
-kbd_layout_mgr = KbdLayoutManager(("us", "ru", "de"))
+    def poll(self):
+        kbd_layout = self._get_keyboard_layout()
+        return kbd_layout.upper()
 
 @hook.subscribe.startup_once
 def autostart():
     script = os.path.expanduser("~/.local/bin/autostart.sh")
     subprocess.run([script])
-    kbd_layout_mgr.set_keyboard_layout()
 
 
 @hook.subscribe.shutdown
@@ -123,8 +125,10 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "space", lazy.spawn("rofi -show drun"), desc="Spawn a command using a prompt widget"),
-    Key(["mod1"], "space", lazy.function(kbd_layout_mgr.set_previous), desc="Set next keyboard layout"),
-    Key(["mod1", "shift"], "space", lazy.function(kbd_layout_mgr.set_next), desc="Set next keyboard layout"),
+
+    # Language
+    # alt+space is used by setxkblayout itself
+    Key(["shift"], "space", lazy.widget["latinandnonlatinkbdlayout"].next_latin_layout(), desc="Next keyboard layout."),
 
     # Volume keys
     Key(["mod1"], "F10", lazy.widget["volume"].mute(), desc="Mute/unmute the sound"),
@@ -214,7 +218,11 @@ screens = [
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
                 # widget.Systray(),
-                widget.KeyboardLayout(),
+                LatinAndNonLatinKbdLayout(
+                    latin_layouts = ["us", "de"],
+                    non_latin_layouts = ["ru"],
+                    option="grp:alt_space_toggle,ctrl:swapcaps"
+                ),
                 # widget.Wlan(),
                 widget.Bluetooth(),
                 widget.Volume(
