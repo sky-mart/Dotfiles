@@ -65,6 +65,7 @@ class LatinAndNonLatinKbdLayout(widget.base.InLoopPollText):
         kbd_layout = self._get_keyboard_layout()
         return kbd_layout.upper()
 
+
 @hook.subscribe.startup_once
 def autostart():
     script = os.path.expanduser("~/.local/bin/autostart.sh")
@@ -87,7 +88,7 @@ keys = [
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
+    # Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -129,6 +130,11 @@ keys = [
     # Language
     # alt+space is used by setxkblayout itself
     Key(["shift"], "space", lazy.widget["latinandnonlatinkbdlayout"].next_latin_layout(), desc="Next keyboard layout."),
+
+    # Player
+    Key(["mod1"], "F7", lazy.spawn("playerctl previous"), desc="Previous track"),
+    Key(["mod1"], "F8", lazy.spawn("playerctl play-pause"), desc="Play/pause"),
+    Key(["mod1"], "F9", lazy.spawn("playerctl next"), desc="Next track"),
 
     # Volume keys
     Key(["mod1"], "F10", lazy.widget["volume"].mute(), desc="Mute/unmute the sound"),
@@ -207,6 +213,13 @@ screens = [
                 widget.GroupBox(),
                 widget.Prompt(),
                 widget.WindowName(),
+                widget.Chord(
+                    chords_colors={
+                        "launch": ("#ff0000", "#ffffff"),
+                    },
+                    name_transform=lambda name: name.upper(),
+                ),
+                widget.Mpris2(poll_interval=1.0),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
