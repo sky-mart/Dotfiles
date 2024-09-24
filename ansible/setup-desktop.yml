@@ -6,57 +6,32 @@
       ansible.builtin.apt:
         update_cache: true
         pkg:
+          - dunst
           - git
-          - nitrogen
           - kitty
+          - nitrogen
+          - picom
+          - playerctl
           - rofi
           - vim
-
-    - name: Install Qtile dependencies
-      become: yes
-      ansible.builtin.apt:
-        pkg:
+          - xscreensaver
+          - xsecurelock
+          - xss-lock
+          # qtile dependencies
           - libpangocairo-1.0-0
           - python3-pip
           - python3-xcffib
           - python3-cairocffi
 
+
     - name: Install Qtile
       ansible.builtin.pip:
         name: qtile
 
-    - name: Copy qtile.desktop
-      become: yes
-      ansible.builtin.copy:
-        src: ../qtile/qtile.desktop
-        dest: /usr/share/xsessions/
+    - name: Git checkout my dotfiles
+      ansible.builtin.git:
+        repo: 'https://github.com/sky-mart/Dotfiles.git'
+        dest: ~/Dotfiles
 
-    - name: Copy qtile config
-      ansible.builtin.copy:
-        src: ../qtile/config.py
-        dest: ~/.config/qtile/
-
-    - name: Copy kitty config
-      ansible.builtin.copy:
-        src: ../kitty/kitty.conf
-        dest: ~/.config/kitty/
-
-    - name: Copy kitty theme
-      ansible.builtin.copy:
-        src: ../kitty/nord.conf
-        dest: ~/.config/kitty/
-
-    - name: Copy rofi config
-      ansible.builtin.copy:
-        src: ../rofi/config.rasi
-        dest: ~/.config/rofi/
-
-    - name: Copy rofi theme
-      ansible.builtin.copy:
-        src: ../rofi/nord.rasi
-        dest: ~/.config/rofi/
-
-    - name: Copy wallpaper
-      ansible.builtin.copy:
-        src: ../wp.png
-        dest: ~/Pictures/
+    - name: Install my config files
+      ansible.builtin.shell: ~/Dotfiles/install.sh

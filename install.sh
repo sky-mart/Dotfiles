@@ -15,6 +15,7 @@ cp $DIR/kitty/* ~/.config/kitty
 mkdir ~/.config/rofi
 cp $DIR/rofi/* ~/.config/rofi
 
+sudo cp $DIR/qtile/qtile.desktop /usr/share/xsessions/
 mkdir ~/.config/qtile
 ln -s $DIR/qtile/config.py ~/.config/qtile/config.py
 
