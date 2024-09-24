@@ -68,6 +68,7 @@ class LatinAndNonLatinKbdLayout(widget.base.InLoopPollText):
 
 @hook.subscribe.startup_once
 def autostart():
+    os.environ["XSECURELOCK_SAVER"] = "saver_xscreensaver"
     script = os.path.expanduser("~/.local/bin/autostart.sh")
     subprocess.run([script])
 
@@ -316,3 +317,4 @@ wl_xcursor_size = 24
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
