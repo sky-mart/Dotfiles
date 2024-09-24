@@ -8,6 +8,7 @@
         pkg:
           - dunst
           - git
+          - libx11-dev # for xkblayout-state
           - kitty
           - nitrogen
           - picom
@@ -23,10 +24,13 @@
           - python3-xcffib
           - python3-cairocffi
 
-
     - name: Install Qtile
       ansible.builtin.pip:
         name: qtile
+
+    - name: Install dbus-next
+      ansible.builtin.pip:
+        name: dbus-next
 
     - name: Git checkout my dotfiles
       ansible.builtin.git:
