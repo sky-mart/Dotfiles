@@ -129,7 +129,7 @@ keys = [
 
     # Language
     # alt+space is used by setxkblayout itself
-    Key(["shift"], "space", lazy.widget["latinandnonlatinkbdlayout"].next_latin_layout(), desc="Next keyboard layout."),
+    Key(["control", "shift"], "d", lazy.widget["latinandnonlatinkbdlayout"].next_latin_layout(), desc="Next keyboard layout."),
 
     # Player
     Key(["mod1"], "F7", lazy.spawn("playerctl previous"), desc="Previous track"),
@@ -140,6 +140,8 @@ keys = [
     Key(["mod1"], "F10", lazy.widget["volume"].mute(), desc="Mute/unmute the sound"),
     Key(["mod1"], "F11", lazy.widget["volume"].decrease_vol(), desc="Make the sound queiter"),
     Key(["mod1"], "F12", lazy.widget["volume"].increase_vol(), desc="Make the sound louder"),
+
+    Key(["mod1", "shift"], "l", lazy.spawn("xsecurelock"), desc="Lock the screen"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
