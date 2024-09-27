@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-picom -b -c & # compositor
+picom -b -c --backend glx & # compositor
 nitrogen --restore & # wallpaper
 
 # lock screen
