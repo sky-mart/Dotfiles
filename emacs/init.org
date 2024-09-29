@@ -1,4 +1,3 @@
-
 #+TITLE: My Emacs Configuration
 #+AUTHOR: Vlad Agievich
 #+EMAIL: sky-mart@hotmail.com
@@ -21,10 +20,8 @@
 (set-fringe-mode 10) ; Give some breathing room
 (menu-bar-mode -1)   ; Disable the menubar
 
-;; (set-face-attribute 'default nil :font "Fira Code
-
-;; Font size 13.5 pt
-;; (set-face-attribute 'default nil :height 135)
+(set-face-attribute 'default nil :font "Fira Code")
+(set-face-attribute 'default nil :height 100)
 #+END_SRC
 
 * Behavior
@@ -684,7 +681,7 @@ My custom debugging mode to run commands and more
       org-support-shift-select t     ;; Allow shift selection with arrows
       org-startup-folded t           ;; Collapse all headlines
       org-directory "~/Documents/Notes"
-      org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
+      ;; org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
       )
 
 (defun open-note (exact-file)
