@@ -254,6 +254,7 @@ screens = [
                         "Button3": lazy.widget["volume"].decrease_vol(),
                     }
                 ),
+                widget.Wlan(interface="wlp6s0", scroll=True, width=400),
                 widget.Clock(format="%Y-%m-%d %a %H:%M"),
                 widget.QuickExit(),
             ],
@@ -317,4 +318,3 @@ wl_xcursor_size = 24
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
-
