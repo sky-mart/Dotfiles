@@ -9,12 +9,14 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-git clone https://github.com/nonpop/xkblayout-state.git
-cd xkblayout-state
-make
-sudo cp xkblayout-state /usr/bin/
-cd ..
-rm -r xkblayout-state
+ln -sf "$DIR/emacs/init.el" ~/.emacs.d/
+
+# git clone https://github.com/nonpop/xkblayout-state.git
+# cd xkblayout-state
+# make
+# sudo cp xkblayout-state /usr/bin/
+# cd ..
+# rm -r xkblayout-state
 
 mkdir ~/.config/kitty
 cp $DIR/kitty/* ~/.config/kitty
@@ -22,12 +24,12 @@ cp $DIR/kitty/* ~/.config/kitty
 mkdir ~/.config/rofi
 cp $DIR/rofi/* ~/.config/rofi
 
-sudo cp $DIR/qtile/qtile.desktop /usr/share/xsessions/
-mkdir ~/.config/qtile
-ln -sf $DIR/qtile/config.py ~/.config/qtile/config.py
+# sudo cp $DIR/qtile/qtile.desktop /usr/share/xsessions/
+# mkdir ~/.config/qtile
+# ln -sf $DIR/qtile/config.py ~/.config/qtile/config.py
 
-mkdir ~/.config/picom
-ln -sf $DIR/picom/picom.conf ~/.config/picom/picom.conf
+# mkdir ~/.config/picom
+# ln -sf $DIR/picom/picom.conf ~/.config/picom/picom.conf
 
-ln -sf $DIR/scripts/autosart.sh ~/.local/bin/autostart.sh
-ln -sf $DIR/scripts/shutdown.sh ~/.local/bin/shutdown.sh
+# ln -sf $DIR/scripts/autosart.sh ~/.local/bin/autostart.sh
+# ln -sf $DIR/scripts/shutdown.sh ~/.local/bin/shutdown.sh
