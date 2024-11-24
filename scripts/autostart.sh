@@ -11,6 +11,6 @@ systemctl --user start emacs
 
 dunst &
 
-bluetoothctl connect 00:42:79:B7:C9:8D # JBL
+bluetoothctl connect 00:42:79:B7:C9:8D & # JBL
 
 playerctld daemon
