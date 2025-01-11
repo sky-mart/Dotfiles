@@ -689,7 +689,8 @@
       org-support-shift-select t     ;; Allow shift selection with arrows
       org-startup-folded t           ;; Collapse all headlines
       org-directory "~/Documents/Notes"
-      ;; org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
+      org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
+      org-todo-keywords '((sequence "TODO(t)" "IN-PROGRESS(i)" "WAITING(w)" "SOMEDAY(s)" "|" "DONE(d)" "CANCELED(c)"))
       )
 
 (defun open-note (exact-file)
