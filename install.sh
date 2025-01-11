@@ -11,6 +11,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 ln -sf "$DIR/emacs/init.el" ~/.emacs.d/
 
+ln -sf "$DIR/scripts/blconnect.sh" ~/.local/bin/
+
 # git clone https://github.com/nonpop/xkblayout-state.git
 # cd xkblayout-state
 # make
