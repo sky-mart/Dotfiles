@@ -41,13 +41,16 @@
         content: |
           [Unit]
           Description={{ service_name }} Service
-          After=network.target
+          Requires=docker.service
+          After=docker.serviceAfter=network.target
 
           [Service]
+          Type=oneshot
+          RemainAfterExit=yes
           ExecStart=docker-compose up -d
           ExecStop=docker-compose down
           WorkingDirectory={{ project_path }}
-          Restart=always
+          TimeoutStartSec=0
 
           [Install]
           WantedBy=multi-user.target
