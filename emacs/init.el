@@ -690,7 +690,7 @@
       org-startup-folded t           ;; Collapse all headlines
       org-directory "~/Documents/Notes"
       org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
-      org-todo-keywords '((sequence "TODO(t)" "IN-PROGRESS(i)" "WAITING(w)" "SOMEDAY(s)" "|" "DONE(d)" "CANCELED(c)"))
+      org-todo-keywords '((sequence "TODO(1)" "IN-PROGRESS(2)" "WAITING(4)" "SOMEDAY(5)" "|" "DONE(3)" "CANCELED(6)"))
       )
 
 (defun open-note (exact-file)
@@ -708,10 +708,8 @@
    ("е" (open-note "Todo.org") "Todo") ;; cyrillic
    ("s" (open-note "Stats.org") "Stats")
    ("ы" (open-note "Stats.org") "Stats") ;; cyrillic
-   ("e" (open-note "Expences.org") "Expences")
-   ("у" (open-note "Expences.org") "Expences") ;; cyrillic
-   ("i" (open-note "Inbox.org") "Inbox")
-   ("ш" (open-note "Inbox.org") "Inbox") ;; cyrillic
+   ("a" (org-agenda-list) "Agenda")
+   ("ф" (org-agenda-list) "Agenda") ;; cyrillic
 ))
 
 ;; requires pandoc
