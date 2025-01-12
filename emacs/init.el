@@ -109,7 +109,7 @@
 
 (global-set-key
  (kbd "M-\\")
- (lambda () (interactive) (find-file "~/Dotfiles/emacs/init.org")))
+ (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package setup
@@ -704,8 +704,10 @@
    ("в" (open-note "Diary.org") "Diary") ;; cyrillic
    ("n" (open-note "Notes.org") "Notes")
    ("т" (open-note "Notes.org") "Notes") ;; cyrillic
-   ("t" (open-note "Todo.org") "Todo")
-   ("е" (open-note "Todo.org") "Todo") ;; cyrillic
+   ("t" (open-note "Tech.org") "Tech")
+   ("е" (open-note "Tech.org") "Tech") ;; cyrillic
+   ("d" (open-note "Todo.org") "Todo")
+   ("в" (open-note "Todo.org") "Todo") ;; cyrillic
    ("s" (open-note "Stats.org") "Stats")
    ("ы" (open-note "Stats.org") "Stats") ;; cyrillic
    ("a" (org-agenda-list) "Agenda")
