@@ -1,8 +1,136 @@
 - name: Desktop notes
-  hosts: localhost
+  hosts: all
+  vars:
+    notes_path: "~/Documents/Notes"
+    service_name: "mount-dav-notes"
+    server_addr: ""
+    server_port: "1443"
+    server_user: ""
+    server_password: ""
+    server_crt_path: ""
+
   tasks:
-    - name: Setup backups
-      ansible.builtin.cron:
-        name: DAV notes backup
-        special_time: daily
-        job: "tar -cf ~/Documents/Notes.bkp/$(date +%Y-%m-%d).tar ~/Documents/Notes"
+  - name: Replace ~ in the path
+    set_fact:
+      expanded_path: "{{ notes_path | replace('~', ansible_env.HOME) }}"
+
+  - name: Install davfs2
+    ansible.builtin.apt:
+      pkg:
+      - davfs2
+      update_cache: true
+      state: present
+    become: true
+
+  - name: Add setuid to allow non-root davfs2 mounts
+    ansible.builtin.file:
+      path: /usr/sbin/mount.davfs
+      mode: u+s
+    become: true
+
+  - name: Add user to the group davfs2
+    ansible.builtin.user:
+      name: "{{ ansible_user }}"
+      groups: davfs2
+      append: true
+    become: true
+
+  - name: Reset ssh connection
+    ansible.builtin.meta: reset_connection
+
+  - name: Create the davfs2 and certs directories
+    ansible.builtin.file:
+      path: ~/.davfs2/certs
+      state: directory
+      mode: "0755"
+
+  - name: Add the server password
+    ansible.builtin.copy:
+     dest: ~/.davfs2/secrets
+     content: "https://{{ server_addr }}:{{ server_port }} {{ server_user }} {{ server_password }}"
+     mode: '0600'
+
+  - name: Copy the notes certificate
+    ansible.builtin.copy:
+      src: "{{ server_crt_path }}"
+      dest: ~/.davfs2/certs/notes.crt
+
+  - name: Copy the template config
+    ansible.builtin.copy:
+      src: /usr/share/davfs2/davfs2.conf
+      dest: ~/.davfs2/davfs2.conf
+      remote_src: true
+
+  - name: Insert the notes davfs2 config
+    ansible.builtin.blockinfile:
+      append_newline: true
+      prepend_newline: true
+      path: ~/.davfs2/davfs2.conf
+      block: |
+        [{{ expanded_path }}]
+        use_locks	0
+        trust_ca_cert	notes.crt
+
+  - name: Create the notes directory
+    ansible.builtin.file:
+      path: "{{ expanded_path }}"
+      state: directory
+      mode: "0755"
+
+  - name: Get the UID of the user
+    ansible.builtin.shell: "id -u {{ ansible_user }}"
+    register: user_uid
+
+  - name: Ensure a specific line is present in a file
+    ansible.builtin.lineinfile:
+      path: /etc/fstab
+      line: "https://{{ server_addr }}:{{ server_port }} {{ expanded_path }} davfs rw,user,uid={{ user_uid.stdout }},noauto 0 0"
+    become: true
+
+  - name: Create the user systemd directory
+    ansible.builtin.file:
+      path: ~/.config/systemd/user
+      state: directory
+      mode: "0755"
+
+  - name: Copy the systemd unit file
+    ansible.builtin.copy:
+      dest: "~/.config/systemd/user/{{ service_name }}.service"
+      content: |
+        [Unit]
+        Description=Mount WebDAV Notes Service
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        Type=oneshot
+        ExecStart=bash -c 'for i in {1..15}; do if ping -c 1 {{ server_addr }}; then mount {{ expanded_path }}; exit 0; else sleep 1; fi; done; exit 1'
+        ExecStop=umount {{ expanded_path }}
+        RemainAfterExit=true
+
+        [Install]
+        WantedBy=default.target
+      mode: '0644'
+
+  - name: Reload systemd to pick up the new service unit file
+    ansible.builtin.systemd:
+      daemon_reload: true
+      scope: user
+
+  - name: Enable the service to start on boot
+    ansible.builtin.systemd:
+      name: "{{ service_name }}"
+      enabled: true
+      scope: user
+
+  - name: Start the service
+    ansible.builtin.systemd:
+      name: "{{ service_name }}"
+      state: started
+      scope: user
+
+  - name: Make sure index.html exists
+    ansible.builtin.stat:
+      path: "{{ expanded_path }}/index.html"
+    register: index_stat
+    failed_when: not index_stat.stat.exists
