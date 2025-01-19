@@ -13,6 +13,8 @@ ln -sf "$DIR/emacs/init.el" ~/.emacs.d/
 
 ln -sf "$DIR/scripts/blconnect.sh" ~/.local/bin/
 
+ln -sf "$DIR"/.zshrc ~/.zshrc
+
 # git clone https://github.com/nonpop/xkblayout-state.git
 # cd xkblayout-state
 # make
@@ -20,10 +22,10 @@ ln -sf "$DIR/scripts/blconnect.sh" ~/.local/bin/
 # cd ..
 # rm -r xkblayout-state
 
-mkdir ~/.config/kitty
+mkdir -p ~/.config/kitty
 cp $DIR/kitty/* ~/.config/kitty
 
-mkdir ~/.config/rofi
+mkdir -p ~/.config/rofi
 cp $DIR/rofi/* ~/.config/rofi
 
 # sudo cp $DIR/qtile/qtile.desktop /usr/share/xsessions/
