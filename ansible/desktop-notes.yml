@@ -7,7 +7,7 @@
     server_port: "1443"
     server_user: ""
     server_password: ""
-    server_crt_path: ""
+    server_crt_path: "../certs/notes.crt"
 
   tasks:
   - name: Replace ~ in the path
@@ -121,6 +121,6 @@
       enabled: true
       scope: user
 
-  - name: Print the command output
-      debug:
-        msg: "A reboot is required for the changes to take effect"
+  - name: Warn about a required reboot
+    ansible.builtin.debug:
+      msg: "A reboot is required for the changes to take effect"
