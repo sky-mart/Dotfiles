@@ -22,10 +22,16 @@
       state: present
     become: true
 
-  - name: Add setuid to allow non-root davfs2 mounts
-    ansible.builtin.file:
-      path: /usr/sbin/mount.davfs
-      mode: u+s
+  - name: Allow non-root users to mount davfs2
+    ansible.builtin.debconf:
+      name: davfs2
+      question: davfs2/suid_file
+      value: true
+      vtype: boolean
+    become: true
+
+  - name: Reconfigure the davfs2 package
+    ansible.builtin.command: "dpkg-reconfigure -f noninteractive davfs2"
     become: true
 
   - name: Add user to the group davfs2
@@ -34,9 +40,6 @@
       groups: davfs2
       append: true
     become: true
-
-  - name: Reset ssh connection
-    ansible.builtin.meta: reset_connection
 
   - name: Create the davfs2 and certs directories
     ansible.builtin.file:
@@ -112,25 +115,12 @@
         WantedBy=default.target
       mode: '0644'
 
-  - name: Reload systemd to pick up the new service unit file
-    ansible.builtin.systemd:
-      daemon_reload: true
-      scope: user
-
   - name: Enable the service to start on boot
     ansible.builtin.systemd:
       name: "{{ service_name }}"
       enabled: true
       scope: user
 
-  - name: Start the service
-    ansible.builtin.systemd:
-      name: "{{ service_name }}"
-      state: started
-      scope: user
-
-  - name: Make sure index.html exists
-    ansible.builtin.stat:
-      path: "{{ expanded_path }}/index.html"
-    register: index_stat
-    failed_when: not index_stat.stat.exists
+  - name: Print the command output
+      debug:
+        msg: "A reboot is required for the changes to take effect"
