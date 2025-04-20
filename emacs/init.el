@@ -453,22 +453,14 @@
 ;; Development
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (use-package eglot
-  ;; :hook
-  ;; (c++-mode . eglot-ensure)
-  ;; (c-mode . eglot-ensure)
-  ;; (python-mode . eglot-ensure)
-  ;; (rust-mode . eglot-ensure)
-  ;; :config
-  ;; (add-to-list 'eglot-server-programs
-               ;; '((c++-mode c-mode) . ("clangd"))
-               ;; '((rust-ts-mode rust-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
+(add-to-list 'major-mode-remap-alist
+             '(python-mode . python-ts-mode))
 
 (use-package lsp-mode
   :hook
   (c++-mode . lsp-deferred)
   (c-mode . lsp-deferred)
-  (python-mode . lsp-deferred)
+  (python-ts-mode . lsp-deferred)
   (rust-ts-mode . lsp-deferred)
   :config
   (add-to-list 'lsp-language-id-configuration '(rust-ts-mode . "rust"))
@@ -476,6 +468,7 @@
                         :new-connection (lsp-stdio-connection "rust-analyzer")
                         :activation-fn (lsp-activate-on "rust")
                         :server-id 'rust-analyzer))
+  (setq lsp-disabled-clients '(ruff))
   )
 
 (use-package company
