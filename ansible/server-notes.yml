@@ -78,4 +78,6 @@
       ansible.builtin.cron:
         name: DAV notes backup
         special_time: daily
-        job: "tar -cf {{ project_path }}/backups/$(date +%Y-%m-%d).tar {{ project_path }}/data"
+        job: "tar cfzP {{ project_path }}/backups/$(date +%Y-%m-%d).tar {{ project_path }}/data"
+        user: root
+      become: true
