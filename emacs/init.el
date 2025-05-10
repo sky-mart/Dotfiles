@@ -68,7 +68,7 @@
 (setq require-final-newline t)
 
 ;; C-x, C-c, C-v for cut, copy, paste
-;; (cua-mode t)
+(cua-mode t)
 
 (setq apropos-sort-by-scores t) ; Sort apropos results by relevancy
 
@@ -488,6 +488,8 @@
 (use-package yasnippet-snippets)
 
 (use-package bazel)
+
+(use-package rustic)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python
