@@ -10,6 +10,7 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 ln -sf "$DIR/emacs/init.el" ~/.emacs.d/
+ln -sf "$DIR/emacs/wait-for-display.sh" ~/.emacs.d/
 
 ln -sf "$DIR/scripts/blconnect.sh" ~/.local/bin/
 

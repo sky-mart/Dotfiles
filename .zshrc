@@ -105,7 +105,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias em="emacsclient -c -n"
-
+alias emw="emacsclient --create-frame --no-wait" # new window
+alias emr="emacsclient --reuse-frame --no-wait"
+alias em="emacsclient --tty"
 # smart cd command
 eval "$(zoxide init zsh)"
