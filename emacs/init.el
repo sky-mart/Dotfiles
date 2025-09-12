@@ -74,6 +74,9 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)      ; y and n instead of yes and no everywhere else
 
+(global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "M-r") 'ripgrep-regexp)
+
 ;; Comment line or region.
 (global-set-key (kbd "C-/") 'comment-line)
 
@@ -110,6 +113,8 @@
 (global-set-key
  (kbd "M-\\")
  (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
+
+(global-set-key (kbd "C-r") 'replace-string)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package setup
@@ -326,7 +331,8 @@
   :bind (("C-o" . avy-goto-char)))
 
 ;; better grep
-(use-package ripgrep)
+(use-package ripgrep
+  :bind (("M-r" . ripgrep-regexp)))
 
 (use-package fzf
   :bind
