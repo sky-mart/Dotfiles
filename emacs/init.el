@@ -74,6 +74,7 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)      ; y and n instead of yes and no everywhere else
 
+
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "M-r") 'ripgrep-regexp)
 
@@ -91,6 +92,7 @@
 (global-unset-key (kbd "<down-mouse-9>"))
 
 (global-unset-key (kbd "M-<down-mouse-1>"))
+(global-unset-key (kbd "M-<mouse-1>"))
 
 (defun display-ansi-colors ()
   (interactive)
@@ -112,9 +114,10 @@
 
 (global-set-key
  (kbd "M-\\")
- (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
+ (lambda () (interactive) (find-file (file-truename "~/.emacs.d/init.el"))))
 
 (global-set-key (kbd "C-r") 'replace-string)
+(setq replace-start-from-point nil) ; Start replacements from the start of the file
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package setup
@@ -490,8 +493,6 @@
   :config
   (yas-global-mode 1)
   (add-to-list 'company-backends 'company-yasnippet))
-
-(use-package yasnippet-snippets)
 
 (use-package bazel)
 
