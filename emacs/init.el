@@ -74,8 +74,7 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)      ; y and n instead of yes and no everywhere else
 
-
-(global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "<f5>") (lambda () (interactive) (revert-buffer nil t)))
 (global-set-key (kbd "M-r") 'ripgrep-regexp)
 
 ;; Comment line or region.
