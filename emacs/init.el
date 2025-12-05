@@ -703,14 +703,14 @@
    "Open notes"
    ("d" (open-note "Diary.org") "Diary")
    ("в" (open-note "Diary.org") "Diary") ;; cyrillic
-   ("t" (open-note "Notes.org") "Notes")
-   ("е" (open-note "Notes.org") "Notes") ;; cyrillic
-   ("c" (open-note "Tech.org") "Tech")
-   ("с" (open-note "Tech.org") "Tech") ;; cyrillic
-   ("j" (open-note "Projects.org") "Todo")
-   ("о" (open-note "Projects.org") "Todo") ;; cyrillic
-   ("p" (open-note "Plans") "Todo")
-   ("з" (open-note "Plans.org") "Todo") ;; cyrillic
+   ("t" (open-note "Texts.org") "Texts")
+   ("е" (open-note "Texts.org") "Texts") ;; cyrillic
+   ("k" (open-note "KB.org") "KB")
+   ("л" (open-note "KB.org") "KB") ;; cyrillic
+   ("j" (open-note "Projects.org") "Projects")
+   ("о" (open-note "Projects.org") "Projects") ;; cyrillic
+   ("p" (open-note "Plans") "Plans")
+   ("з" (open-note "Plans.org") "Plans") ;; cyrillic
    ("s" (open-note "Stats.org") "Stats")
    ("ы" (open-note "Stats.org") "Stats") ;; cyrillic
    ("a" (org-agenda-list) "Agenda")
