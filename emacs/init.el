@@ -479,6 +479,25 @@
   (setq lsp-disabled-clients '(ruff))
   )
 
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (require 'dap-cpptools) ;; requires mono installed on your system
+  (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
+  (dap-auto-configure-mode)
+  (dap-register-debug-template "Rust::CppTools Run Configuration"
+                                 (list :type "cppdbg"
+                                       :request "launch"
+                                       :name "Rust::Run"
+                                       :MIMode "gdb"
+                                       :miDebuggerPath "rust-gdb"
+                                       :environment []
+                                       :program "${workspaceFolder}/target/debug/hello / replace with binary"
+                                       :cwd "${workspaceFolder}"
+                                       :console "external"
+                                       :dap-compilation "cargo build"
+                                       :dap-compilation-dir "${workspaceFolder}")))
+
 (use-package company
   :config
   (setq company-idle-delay 0)
