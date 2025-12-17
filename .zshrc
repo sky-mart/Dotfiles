@@ -95,6 +95,7 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR="emacsclient --tty"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -110,5 +111,6 @@ source $ZSH/oh-my-zsh.sh
 alias emw="emacsclient --create-frame --no-wait" # new window
 alias emr="emacsclient --reuse-frame --no-wait"
 alias em="emacsclient --tty"
+alias se="sudoedit"
 # smart cd command
 eval "$(zoxide init zsh)"
