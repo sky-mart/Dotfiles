@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; User Interface
-(setq inhibit-startup-message t)
+(setq inhibit-startup-message t) ; Disable the splash screen
 
 (scroll-bar-mode -1) ; Disable visible scrollbar
 (tool-bar-mode -1)   ; Disable the toolbar
@@ -709,8 +709,8 @@
       org-src-fontify-natively t     ;; Code highlighting in code blocks
       org-support-shift-select t     ;; Allow shift selection with arrows
       org-startup-folded t           ;; Collapse all headlines
-      org-directory "~/Documents/Notes"
-      org-agenda-files '("~/Documents/Notes") ;; And all of those files should be in included agenda.
+      org-directory "~/notes"
+      org-agenda-files '("~/notes") ;; And all of those files should be in included agenda.
       org-todo-keywords '((sequence "TODO(1)" "IN-PROGRESS(2)" "WAITING(4)" "SOMEDAY(5)" "|" "DONE(3)" "CANCELED(6)"))
       )
 
@@ -729,7 +729,7 @@
    ("л" (open-note "KB.org") "KB") ;; cyrillic
    ("j" (open-note "Projects.org") "Projects")
    ("о" (open-note "Projects.org") "Projects") ;; cyrillic
-   ("p" (open-note "Plans") "Plans")
+   ("p" (open-note "Plans.org") "Plans")
    ("з" (open-note "Plans.org") "Plans") ;; cyrillic
    ("s" (open-note "Stats.org") "Stats")
    ("ы" (open-note "Stats.org") "Stats") ;; cyrillic

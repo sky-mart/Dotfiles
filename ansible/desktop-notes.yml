@@ -1,7 +1,7 @@
 - name: Desktop notes
   hosts: all
   vars:
-    notes_path: "~/Documents/Notes"
+    notes_path: "~/notes"
     service_name: "mount-dav-notes"
     server_addr: ""
     server_port: "1443"
