@@ -234,6 +234,7 @@
 ;; display correctly:
 ;;
 ;; M-x all-the-icons-install-fonts
+;; M-x nerd-icons-install-fonts
 
 (use-package all-the-icons)
 
