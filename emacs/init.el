@@ -194,7 +194,10 @@
    ("д" downcase-dwim "Lower case") ;; cyrillic
    ("c" capitalize-dwim "Capitalize")
    ("с" capitalize-dwim "Capitalize") ;; cyrillic
-))
+   ))
+
+(global-set-key (kbd "M-l") 'duplicate-line)
+(setq duplicate-line-final-position -1) ; move cursor to the last new line
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Help
