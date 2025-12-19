@@ -42,7 +42,8 @@
           [Unit]
           Description={{ service_name }} Service
           Requires=docker.service
-          After=docker.serviceAfter=network.target
+          After=docker.service
+          After=network.target
 
           [Service]
           Type=oneshot
@@ -74,10 +75,20 @@
         state: started
       become: true
 
+    - name: Write the backup command into a script
+      ansible.builtin.copy:
+        dest: "/usr/bin/backup-notes.sh"
+        content: |
+          #!/usr/bin/env sh
+
+          tar cfzP {{ project_path }}/backups/$(date +%Y-%m-%d).tar {{ project_path }}/data
+        mode: '0733'
+      become: true
+
     - name: Setup backups
       ansible.builtin.cron:
         name: DAV notes backup
         special_time: daily
-        job: "tar cfzP {{ project_path }}/backups/$(date +%Y-%m-%d).tar {{ project_path }}/data"
+        job: "/usr/bin/backup-notes.sh"
         user: root
       become: true
