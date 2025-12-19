@@ -723,6 +723,8 @@
    "Open notes"
    ("d" (open-note "Diary.org") "Diary")
    ("в" (open-note "Diary.org") "Diary") ;; cyrillic
+   ("i" (open-note "Inbox.org") "Inbox")
+   ("ш" (open-note "Inbox.org") "Inbox") ;; cyrillic
    ("t" (open-note "Texts.org") "Texts")
    ("е" (open-note "Texts.org") "Texts") ;; cyrillic
    ("k" (open-note "KB.org") "KB")
@@ -733,6 +735,8 @@
    ("з" (open-note "Plans.org") "Plans") ;; cyrillic
    ("s" (open-note "Stats.org") "Stats")
    ("ы" (open-note "Stats.org") "Stats") ;; cyrillic
+   ("r" (open-note "Archive.org") "Archive")
+   ("к" (open-note "Archive.org") "Archive") ;; cyrillic
    ("a" (org-agenda-list) "Agenda")
    ("ф" (org-agenda-list) "Agenda") ;; cyrillic
 ))
