@@ -182,12 +182,19 @@
   :config
   (move-text-default-bindings))
 
-;; Upcase and lowercase word or region, if selected.
-;; To capitalize or un-capitalize word use Alt+c and Alt+l
-(global-set-key (kbd "M-u") 'upcase-dwim)   ;; Alt+u upcase
-(global-set-key (kbd "M-l") 'downcase-dwim) ;; Alt-l lowercase
-
 (use-package hydra)
+
+(global-set-key
+ (kbd "M-u")
+ (defhydra case-launcher (:color blue)
+   "Change case"
+   ("u" upcase-dwim "Upper case")
+   ("г" upcase-dwim "Upper case") ;; cyrillic
+   ("l" downcase-dwim "Lower case")
+   ("д" downcase-dwim "Lower case") ;; cyrillic
+   ("c" capitalize-dwim "Capitalize")
+   ("с" capitalize-dwim "Capitalize") ;; cyrillic
+))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Help
