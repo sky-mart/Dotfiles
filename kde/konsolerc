@@ -1,0 +1,11 @@
+[Desktop Entry]
+DefaultProfile=Vlad.profile
+
+[General]
+ConfigVersion=1
+
+[MainWindow]
+MenuBar=Disabled
+
+[UiSettings]
+ColorScheme=Breeze Light

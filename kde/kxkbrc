@@ -1,0 +1,8 @@
+[Layout]
+DisplayNames=,,
+LayoutList=us,ru,de
+LayoutLoopCount=2
+Options=ctrl:swapcaps,grp_led:scroll,grp:lalt_lshift_toggle
+ResetOldOptions=true
+Use=true
+VariantList=,,

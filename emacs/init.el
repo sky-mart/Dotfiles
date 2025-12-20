@@ -12,7 +12,7 @@
 (menu-bar-mode -1)   ; Disable the menubar
 
 (set-face-attribute 'default nil :font "Fira Code")
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 100)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
