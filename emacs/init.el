@@ -430,8 +430,14 @@
 ;; Development
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'major-mode-remap-alist
-             '(python-mode . python-ts-mode))
+(use-package tree-sitter
+  :config
+  (setq major-mode-remap-alist
+        '((python-mode . python-ts-mode)
+          (c-mode . c-ts-mode)
+          (c++-mode . c++-ts-mode)
+          (rust-mode . rust-ts-mode))))
+
 
 (use-package lsp-mode
   :hook
