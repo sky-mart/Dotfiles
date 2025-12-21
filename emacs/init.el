@@ -75,7 +75,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)      ; y and n instead of yes and no everywhere else
 
 (global-set-key (kbd "<f5>") (lambda () (interactive) (revert-buffer nil t)))
-(global-set-key (kbd "M-r") 'ripgrep-regexp)
 
 ;; Comment line or region.
 (global-set-key (kbd "C-/") 'comment-line)
@@ -345,7 +344,8 @@
 
 ;; better grep
 (use-package ripgrep
-  :bind (("M-r" . ripgrep-regexp)))
+  :config
+  (setq grep-command "rg --no-heading --line-number --smart-case "))
 
 (use-package fzf
   :bind
@@ -367,55 +367,14 @@
 ;; Project management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun mart/rg-project (pattern args)
-  (interactive "sPattern: \nsArguments: ")
-  (ripgrep-regexp pattern (projectile-project-root) (list args)))
+(use-package project
+  :bind
+  (("M-o" . project-find-file)
+   ("M-r" . project-find-regexp)))
 
-(defun mart/rg-only-sources (pattern)
-  (interactive "sPattern: ")
-  (mart/rg-project pattern  "-th -tc -tcpp"))
-
-(defun mart/rg-no-test-and-mock (pattern)
-  (interactive "sPattern: ")
-  (mart/rg-project pattern "-th -tc -tcpp -g '!*test*' -g '!*mock*'"))
-
-(defun mart/projectile-compile-and-scroll (arg)
-  (interactive "P")
-  (projectile-compile-project arg)
-  (switch-to-buffer "*compilation*")
-  (end-of-buffer))
-
-(defun mart/projectile-install-and-scroll (arg)
-  (interactive "P")
-  (projectile-install-project arg)
-  (switch-to-buffer "*compilation*")
-  (end-of-buffer))
-
-;; Project management
-(use-package projectile
-  :diminish projectile-mode
+(use-package project-cmake
   :config
-  (add-to-list 'projectile-project-root-files "Project.meta")
-  :custom
-    ((projectile-completion-system 'ivy)
-     (projectile-globally-ignored-directories ".cache"))
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :bind
-  (("C-S-f" . mart/rg-no-test-and-mock)
-   :map projectile-command-map
-   ("c" . mart/projectile-compile-and-scroll)
-   ("L" . mart/projectile-install-and-scroll))
-  :init
-  ;; NOTE: Set this to the folder where you keep your Git repos!
-  ;; (when (file-directory-p "~/Projects")
-  ;; (setq projectile-project-search-path '("~/Projects")))
-  (setq projectile-switch-project-action 'projectile-dired))
-
-(use-package counsel-projectile
-  :bind
-  (("M-o" . counsel-projectile-find-file))
-  :config (counsel-projectile-mode))
+  (add-hook 'project-find-functions #'project-cmake-find-root -1))
 
 (use-package dashboard
   :config
@@ -437,7 +396,6 @@
 )
 
 ;; Speed up TRAMP
-(setq projectile-mode-line "Projectile")
 (setq vc-ignore-dir-regexp
       (format "%s\\|%s"
                     vc-ignore-dir-regexp
