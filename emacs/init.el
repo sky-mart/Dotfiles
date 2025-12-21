@@ -438,40 +438,12 @@
           (c++-mode . c++-ts-mode)
           (rust-mode . rust-ts-mode))))
 
-
-(use-package lsp-mode
-  :hook
-  (c++-mode . lsp-deferred)
-  (c-mode . lsp-deferred)
-  (python-ts-mode . lsp-deferred)
-  (rust-ts-mode . lsp-deferred)
+(use-package eglot
   :config
-  (add-to-list 'lsp-language-id-configuration '(rust-ts-mode . "rust"))
-  (lsp-register-client (make-lsp-client
-                        :new-connection (lsp-stdio-connection "rust-analyzer")
-                        :activation-fn (lsp-activate-on "rust")
-                        :server-id 'rust-analyzer))
-  (setq lsp-disabled-clients '(ruff))
-  )
+  (add-to-list 'eglot-server-programs
+               '(c++-ts-mode . ("clangd"))))
 
-(use-package dap-mode
-  :after lsp-mode
-  :config
-  (require 'dap-cpptools) ;; requires mono installed on your system
-  (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
-  (dap-auto-configure-mode)
-  (dap-register-debug-template "Rust::CppTools Run Configuration"
-                                 (list :type "cppdbg"
-                                       :request "launch"
-                                       :name "Rust::Run"
-                                       :MIMode "gdb"
-                                       :miDebuggerPath "rust-gdb"
-                                       :environment []
-                                       :program "${workspaceFolder}/target/debug/hello / replace with binary"
-                                       :cwd "${workspaceFolder}"
-                                       :console "external"
-                                       :dap-compilation "cargo build"
-                                       :dap-compilation-dir "${workspaceFolder}")))
+(use-package dape)
 
 (use-package company
   :config
