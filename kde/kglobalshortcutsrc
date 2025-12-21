@@ -7,7 +7,7 @@ Switch keyboard layout to English (US)=none,none,Switch keyboard layout to Engli
 Switch keyboard layout to German=none,none,Switch keyboard layout to German
 Switch keyboard layout to Russian=none,none,Switch keyboard layout to Russian
 Switch to Last-Used Keyboard Layout=,Meta+Alt+L,Switch to Last-Used Keyboard Layout
-Switch to Next Keyboard Layout=,Meta+Alt+K,Switch to Next Keyboard Layout
+Switch to Next Keyboard Layout=Alt+Space,Meta+Alt+K,Switch to Next Keyboard Layout
 _k_friendly_name=Keyboard Layout Switcher
 
 [kaccess]
@@ -260,8 +260,17 @@ switch to next activity=none,,Switch to Next Activity
 switch to previous activity=none,,Switch to Previous Activity
 toggle do not disturb=none,,Toggle do not disturb
 
+[services][net.local.blconnect.sh-3.desktop]
+_launch=Alt+-
+
+[services][net.local.blconnect.sh-4.desktop]
+_launch=Alt+=
+
 [services][org.kde.konsole.desktop]
 _launch=Ctrl+Alt+T\tMeta+Return
 
 [services][org.kde.krunner.desktop]
 _launch=Alt+F2\tSearch\tMeta+Space
+
+[services][org.kde.spectacle.desktop]
+RectangularRegionScreenShot=Meta+Shift+Print\tCtrl+Alt+3
