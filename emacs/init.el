@@ -642,8 +642,6 @@
 ;; Org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'org-habit)
-
 ;; Some basic Org defaults
 
 (add-to-list 'org-modules 'org-habit t)
@@ -662,6 +660,12 @@
 
 (defun open-note (exact-file)
   (find-file (file-name-concat org-directory exact-file)))
+
+(defun mart/new-inbox-entry ()
+  (interactive)
+  (open-note "Inbox.org")
+  (end-of-buffer)
+  (org-meta-return))
 
 (global-set-key
  (kbd "C-`")
@@ -685,6 +689,8 @@
    ("к" (open-note "Archive.org") "Archive") ;; cyrillic
    ("a" (org-agenda-list) "Agenda")
    ("ф" (org-agenda-list) "Agenda") ;; cyrillic
+   ("n" (mart/new-inbox-entry) "New inbox")
+   ("т" (mart/new-inbox-entry) "New inbox") ;; cyrillic
 ))
 
 ;; requires pandoc
