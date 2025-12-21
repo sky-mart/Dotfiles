@@ -268,24 +268,6 @@
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))
     ))
 
-;; File tree
-(use-package neotree
-  :config
-  (setq neo-window-width 32
-        neo-create-file-auto-open t
-        neo-banner-message nil
-        neo-show-updir-line t
-        neo-window-fixed-size nil
-        neo-vc-integration nil
-        neo-mode-line-type 'neotree
-        neo-smart-open t
-        neo-show-hidden-files t
-        neo-mode-line-type 'none
-        neo-auto-indent-point t)
-  (setq neo-theme (if (display-graphic-p) 'nerd 'arrow))
-  (setq neo-hidden-regexp-list '("venv" "\\.pyc$" "~$" "\\.git" "__pycache__" ".DS_Store"))
-  (global-set-key (kbd "s-B") 'neotree-toggle))           ;; Cmd+Shift+b toggle tree
-
 (winner-mode 1) ;; Window configurations
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -309,26 +291,6 @@
   :config
   (ivy-rich-mode 1)
   (setq ivy-rich-path-style 'abbrev))
-
-;; (use-package ivy-posframe
-;;   :ensure t
-;;   :delight
-;;   :custom
-;;   (ivy-posframe-parameters
-;;    '((left-fringe . 2)
-;;      (right-fringe . 2)
-;;      (internal-border-width . 2)))
-;;   (ivy-posframe-height-alist
-;;    '((swiper . 15)
-;;      (swiper-isearch . 15)
-;;      (t . 10)))
-;;   (ivy-posframe-display-functions-alist
-;;    '((complete-symbol . ivy-posframe-display-at-point)
-;;      (swiper . nil)
-;;      (swiper-isearch . nil)
-;;      (t . ivy-posframe-display-at-frame-center)))
-;;   :config
-;;   (ivy-posframe-mode 1))
 
 ;; Part of ivy?
 (use-package counsel
@@ -521,15 +483,6 @@
 
 ;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
 ;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Ruby
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; requires gem install solargraph
-(add-hook 'ruby-mode-hook 'lsp-deferred)
-
-(setenv "GEM_HOME" (format "%s/.local/gem" (getenv "HOME")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Debugging
