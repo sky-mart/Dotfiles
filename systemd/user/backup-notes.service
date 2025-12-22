@@ -1,0 +1,6 @@
+[Unit]
+Description=Backup WebDAV Notes
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/backup-notes.sh
