@@ -1,0 +1,33 @@
+- name: Install configs and scripts
+  hosts: all
+
+  tasks:
+  - name: Create the user executables directory
+    ansible.builtin.file:
+      path: ~/.local/bin
+      state: directory
+      mode: "0755"
+
+  - name: Copy scripts
+    ansible.builtin.file:
+      src: "{{ playbook_dir }}/../scripts/{{ item }}.sh"
+      path: "~/.local/bin/{{ item }}.sh"
+      state: link
+      force: true
+    loop:
+      - backup-notes
+      - blconnect
+
+  - name: Copy kde configs
+    ansible.builtin.file:
+      src: "{{ playbook_dir }}/kde/{{ item }}"
+      path: "~/.config/{{ item }}"
+      state: link
+      force: true
+    loop:
+      - kdeglobals
+      - kglobalshortcutsrc
+      - konsolerc
+      - krunnerrc
+      - kxkbrc
+      - plasma-org.kde.plasma.desktop-appletsrc
