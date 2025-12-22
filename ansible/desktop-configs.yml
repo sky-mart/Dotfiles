@@ -15,19 +15,31 @@
       state: link
       force: true
     loop:
+      - backup-docs
       - backup-notes
       - blconnect
 
-  - name: Copy kde configs
+  - name: Copy systemd user files
     ansible.builtin.file:
-      src: "{{ playbook_dir }}/kde/{{ item }}"
-      path: "~/.config/{{ item }}"
+      src: "{{ playbook_dir }}/../systemd/user/{{ item }}"
+      path: "~/.config/systemd/user/{{ item }}"
       state: link
       force: true
     loop:
-      - kdeglobals
-      - kglobalshortcutsrc
-      - konsolerc
-      - krunnerrc
-      - kxkbrc
-      - plasma-org.kde.plasma.desktop-appletsrc
+      - backup-docs.service
+      - backup-docs.timer
+      - backup-notes.service
+      - backup-notes.timer
+      - emacs.service
+
+  - name: Enable systemd services to start on boot
+    ansible.builtin.systemd:
+      name: "{{ item }}"
+      scope: user
+      enabled: true
+      daemon_reload: true
+      force: true
+    loop:
+      - emacs.service
+      - backup-docs.timer
+      - backup-notes.timer

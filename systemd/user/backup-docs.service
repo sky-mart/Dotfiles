@@ -1,0 +1,6 @@
+[Unit]
+Description=Backup Docs
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/backup-docs.sh

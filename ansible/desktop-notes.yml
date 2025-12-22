@@ -66,13 +66,11 @@
 
   - name: Insert the notes davfs2 config
     ansible.builtin.blockinfile:
-      append_newline: true
-      prepend_newline: true
       path: ~/.davfs2/davfs2.conf
       block: |
         [{{ expanded_path }}]
-        use_locks	0
-        trust_ca_cert	notes.crt
+        use_locks 0
+        trust_ca_cert notes.crt
 
   - name: Create the notes directory
     ansible.builtin.file:
