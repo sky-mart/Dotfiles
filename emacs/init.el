@@ -12,7 +12,7 @@
 (menu-bar-mode -1)   ; Disable the menubar
 
 (set-face-attribute 'default nil :font "Fira Code")
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 110)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Behavior
@@ -446,15 +446,15 @@
 ;;   :config
 ;;   (require 'dap-python))
 
-(use-package auto-virtualenv
-  :init
-  (use-package pyvenv
-    :config
-    (setenv "WORKON_HOME" "/home/vlad/Documents/Dev/Languages/Python")
-    (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] "))))
-  :config
-  (add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
-  )
+;; (use-package auto-virtualenv
+  ;; :init
+  ;; (use-package pyvenv
+    ;; :config
+    ;; (setenv "WORKON_HOME" "/home/vlad/Documents/Dev/Languages/Python")
+    ;; (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] "))))
+  ;; :config
+  ;; (add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
+  ;; )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C++

@@ -4,7 +4,6 @@ After=plasma-workspace.target
 Wants=plasma-workspace.target
 
 [Service]
-Type=notify
 ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
 Restart=on-failure
