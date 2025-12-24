@@ -400,7 +400,14 @@
   (add-to-list 'eglot-server-programs
                '(c++-ts-mode . ("clangd"))))
 
-(use-package dape)
+(use-package dape
+  :bind
+  (("<f5>" . dape-continue)
+   ("S-<f5>" . dape-quit)
+   ("<f9>" . dape-breakpoint-toggle)
+   ("<f10>" . dape-next)
+   ("<f11>" . dape-step-in)
+   ("S-<f11>" . dape-step-out)))
 
 (use-package company
   :config
