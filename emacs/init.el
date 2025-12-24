@@ -92,11 +92,6 @@
 (global-unset-key (kbd "M-<down-mouse-1>"))
 (global-unset-key (kbd "M-<mouse-1>"))
 
-(defun display-ansi-colors ()
-  (interactive)
-  (let ((inhibit-read-only t))
-    (ansi-color-apply-on-region (point-min) (point-max))))
-
 (global-set-key (kbd "C-x 2") (lambda ()
                                 (interactive)
                                 (split-window-below)
@@ -429,6 +424,15 @@
 
 (use-package ansible)
 
+(defun display-ansi-colors ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(add-hook 'compilation-finish-functions
+          (lambda (compilation-buffer result) (display-ansi-colors)))
+
+(setq compilation-scroll-output 'first-error)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
