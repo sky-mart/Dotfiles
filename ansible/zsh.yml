@@ -10,7 +10,9 @@
       - zoxide
       - zsh
       - zsh-syntax-highlighting
-      - fzf
+      # is installed from source
+      # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+      # - fzf
       update_cache: true
       state: present
     become: true
@@ -49,20 +51,8 @@
       depth: 1
       version: 8343e80065e510c2033d16f93472c3ae86be6fe4
 
-  # - name: Change shell to zsh
-  #   ansible.builtin.shell:
-  #     cmd: chsh -s $(which zsh) $(whoami)
-  #   become: yes
-
   - name: Set the shell for a user
     ansible.builtin.user:
       name: "{{ ansible_user }}"
       shell: /usr/bin/zsh
     become: true
-
-  - name: Reset ssh connection
-    meta: reset_connection
-
-  - name: Make sure zsh is used
-    ansible.builtin.shell:
-      cmd: test "$SHELL" = "$(which zsh)"
