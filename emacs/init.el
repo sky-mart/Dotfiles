@@ -74,7 +74,7 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)      ; y and n instead of yes and no everywhere else
 
-(global-set-key (kbd "<f5>") (lambda () (interactive) (revert-buffer nil t)))
+(global-set-key (kbd "<f4>") (lambda () (interactive) (revert-buffer nil t)))
 
 ;; Comment line or region.
 (global-set-key (kbd "C-/") 'comment-line)
