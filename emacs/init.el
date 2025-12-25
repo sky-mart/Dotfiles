@@ -324,14 +324,26 @@
 ;; Project management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package project
+(use-package projectile
+  :diminish projectile-mode
+  :custom
+    ((projectile-completion-system 'ivy)
+     (projectile-globally-ignored-directories ".cache"))
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
   :bind
-  (("M-o" . project-find-file)
-   ("M-r" . project-find-regexp)))
+  (("M-r" . projectile-ripgrep))
+  :init
+  (when (file-directory-p "~/projects/all")
+    (setq projectile-project-search-path '("~/projects/all")))
+  (setq projectile-switch-project-action 'projectile-dired))
 
-(use-package project-cmake
-  :config
-  (add-hook 'project-find-functions #'project-cmake-find-root -1))
+(use-package counsel-projectile
+  :after projectile
+  :after counsel
+  :bind
+  (("M-o" . counsel-projectile-find-file))
+  :config (counsel-projectile-mode))
 
 (use-package dashboard
   :config
