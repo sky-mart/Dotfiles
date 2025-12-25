@@ -413,13 +413,30 @@
                '(c++-ts-mode . ("clangd"))))
 
 (use-package dape
+  :hook
+  (kill-emacs . dape-breakpoint-save) ;; Save breakpoints on quit
+  (after-init . dape-breakpoint-load) ;; Load breakpoints on startup
+
+  :custom
+  ;; Turn on global bindings for setting breakpoints with mouse
+  ;; (dape-breakpoint-global-mode +1)
+  (dape-buffer-window-arrangement 'right)
+  (dape-cwd-function #'projectile-project-root)
+
+  ;; The approach with the start- and stopped- hooks doesn't work
+  ;; The stopped hook is called righ away
   :bind
-  (("<f5>" . dape-continue)
+  (("C-<f5>" . dape)
+   ("<f5>" . dape-continue)
    ("S-<f5>" . dape-quit)
    ("<f9>" . dape-breakpoint-toggle)
    ("<f10>" . dape-next)
    ("<f11>" . dape-step-in)
    ("S-<f11>" . dape-step-out)))
+
+(use-package repeat
+  :custom
+  (repeat-mode t))
 
 (use-package company
   :config
@@ -448,8 +465,11 @@
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
 
-(add-hook 'compilation-finish-functions
-          (lambda (compilation-buffer result) (display-ansi-colors)))
+(defun mart/ansi-colors-hook (compilation-buffer compilation-result)
+  (switch-to-buffer compilation-buffer)
+  (display-ansi-colors))
+
+(add-hook 'compilation-finish-functions 'mart/ansi-colors-hook)
 
 (setq compilation-scroll-output 'first-error)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
