@@ -410,7 +410,9 @@
 (use-package eglot
   :config
   (add-to-list 'eglot-server-programs
-               '(c++-ts-mode . ("clangd"))))
+               '(c++-ts-mode . ("clangd")))
+  (add-to-list 'eglot-server-programs
+               '(python-ts-mode . ("ty" "server"))))
 
 (use-package dape
   :hook
@@ -472,32 +474,15 @@
 (add-hook 'compilation-finish-functions 'mart/ansi-colors-hook)
 
 (setq compilation-scroll-output 'first-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; requires python packages python-lsp-server and debugpy
-
-;; (use-package python-mode
-;;   :hook
-;;   (python-mode . lsp-deferred)
-;;   :custom
-;;   ((python-shell-interpreter "python3")
-;;   (lsp-pylsp-plugins-pydocstyle-enabled nil)
-;;   (dap-python-executable "python3")
-;;   (dap-python-debugger 'debugpy))
-;;   :config
-;;   (require 'dap-python))
-
-;; (use-package auto-virtualenv
-  ;; :init
-  ;; (use-package pyvenv
-    ;; :config
-    ;; (setenv "WORKON_HOME" "/home/vlad/Documents/Dev/Languages/Python")
-    ;; (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] "))))
-  ;; :config
-  ;; (add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
-  ;; )
+;; install
+;; uv tool install ty@latest
+;; uv tool install debugpy
+;; uv add ruff
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C++
