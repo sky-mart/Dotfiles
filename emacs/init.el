@@ -491,6 +491,9 @@
 ;; uv tool install ty@latest
 ;; uv tool install debugpy
 ;; uv add ruff
+(use-package uv-mode
+  ;; set the python shell interpreter to the venv one
+  :hook (python-ts-mode . uv-mode-set))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C++
