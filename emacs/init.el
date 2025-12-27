@@ -412,7 +412,12 @@
   (add-to-list 'eglot-server-programs
                '(c++-ts-mode . ("clangd")))
   (add-to-list 'eglot-server-programs
-               '(python-ts-mode . ("ty" "server"))))
+               '(python-ts-mode . ("ty" "server")))
+  :hook
+  ;; eglot in rust is managed by rustic-mode
+  (c-ts-mode . eglot-ensure)
+  (c++-ts-mode . eglot-ensure)
+  (python-ts-mode . eglot-ensure))
 
 (use-package dape
   :hook
@@ -456,7 +461,10 @@
 
 (use-package bazel)
 
-(use-package rustic)
+(use-package rustic
+  :custom
+  (rustic-lsp-client 'eglot)
+  (rust-mode-treesitter-derive t))
 
 (use-package systemd)
 
