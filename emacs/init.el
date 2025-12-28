@@ -327,16 +327,20 @@
 (use-package projectile
   :diminish projectile-mode
   :custom
-    ((projectile-completion-system 'ivy)
-     (projectile-globally-ignored-directories ".cache"))
+  (projectile-completion-system 'ivy)
+
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :bind
-  (("M-r" . projectile-ripgrep))
+  ("M-r" . projectile-ripgrep)
+
   :init
+  (setq projectile-switch-project-action 'projectile-dired)
   (when (file-directory-p "~/projects/all")
     (setq projectile-project-search-path '("~/projects/all")))
-  (setq projectile-switch-project-action 'projectile-dired))
+
+  :config
+  (add-to-list 'projectile-globally-ignored-directories ".cache"))
 
 (use-package counsel-projectile
   :after projectile
@@ -459,7 +463,8 @@
   (yas-global-mode 1)
   (add-to-list 'company-backends 'company-yasnippet))
 
-(use-package bazel)
+(use-package bazel
+  :mode ("\\.bazel\\'" . bazel-mode))
 
 (use-package rustic
   :custom
