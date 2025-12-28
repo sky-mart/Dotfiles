@@ -440,10 +440,29 @@
   (("C-<f5>" . dape)
    ("<f5>" . dape-continue)
    ("S-<f5>" . dape-quit)
+   ("<f8>" . dape-pause)
    ("<f9>" . dape-breakpoint-toggle)
    ("<f10>" . dape-next)
    ("<f11>" . dape-step-in)
-   ("S-<f11>" . dape-step-out)))
+   ("S-<f11>" . dape-step-out))
+
+  :config
+  (add-to-list
+   'dape-configs
+   ;; openocd needs to be launched first
+   '(cortex
+     modes (c-ts-mode c++-ts-mode)
+     command "gdb"
+     command-args ("-q" "--interpreter=dap" "-ex" "target remote :3333")
+     :type "gdb"
+     :request "launch"
+     ;; still have to run file <program> manually in the repl
+     :program (lambda ()
+                (read-file-name "ELF file: " dape-cwd-fn))
+     :cwd dape-cwd-fn
+     :target "localhost:3333"
+     :stopAtBeginningOfMainSubprogram nil
+     :stopOnEntry nil)))
 
 (use-package repeat
   :custom
