@@ -328,19 +328,22 @@
   :diminish projectile-mode
   :custom
   (projectile-completion-system 'ivy)
+  (projectile-compile-use-comint-mode t)
+  (projectile-ignored-project-function
+   (lambda (project-root)
+     (or (string-search ".cache/bazel" project-root)
+         (string-search ".rustup" project-root))))
+  (projectile-switch-project-action 'projectile-dired)
 
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :bind
   ("M-r" . projectile-ripgrep)
 
-  :init
-  (setq projectile-switch-project-action 'projectile-dired)
-  (when (file-directory-p "~/projects/all")
-    (setq projectile-project-search-path '("~/projects/all")))
-
   :config
-  (add-to-list 'projectile-globally-ignored-directories ".cache"))
+  (add-to-list 'projectile-globally-ignored-directories ".cache")
+  (when (file-directory-p "~/projects/code")
+    (setq projectile-project-search-path '("~/projects/code"))))
 
 (use-package counsel-projectile
   :after projectile
