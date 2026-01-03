@@ -519,6 +519,11 @@
 (use-package bazel
   :mode ("\\.bazel\\'" . bazel-mode))
 
+(defun bazel-target-output (target)
+  "Get the output of a bazel target. 1 output is expected so far."
+  (interactive "sTarget: ")
+  (shell-command (format "bazel cquery %s --output=files 2>/dev/null" target)))
+
 (use-package rustic
   :custom
   (rustic-lsp-client 'eglot)
@@ -570,6 +575,7 @@
 ;; Debugging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO: rewrite using dape
 (defun bazel-debug-at-point ()
   "Run the test case at point."
   (interactive)
