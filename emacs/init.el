@@ -455,6 +455,7 @@
    '(cortex
      modes (c-ts-mode c++-ts-mode)
      command "gdb"
+     ;; -ex "monitor reset halt" can be used to stop the target
      command-args ("-q" "--interpreter=dap" "-ex" "target remote :3333")
      :type "gdb"
      :request "launch"
@@ -477,6 +478,29 @@
      (message "Dape is inactive")))
 
 (add-hook 'dape-active-mode-hook 'mart/dape-mode)
+
+(defvar openocd-process nil
+  "OpenOCD process identificator")
+
+(defun openocd-start (config)
+  "Start OpenOCD with a CONFIG"
+  (interactive "sConfig: ")
+  (setq openocd-process (start-process "OpenOCD" "*openocd*" "openocd" "-f" (format "%s.cfg" config))))
+
+(defun openocd-kill ()
+  (interactive)
+  (when openocd-process
+    (delete-process openocd-process)
+    (kill-buffer "*openocd*")
+    (setq openocd-process nil)))
+
+(defun openocd-debug (config)
+  (interactive "sConfig: ")
+  (add-hook 'dape-active-mode-hook
+            (lambda () (unless dape-active-mode
+                         (openocd-kill))))
+  (openocd-start config)
+  (call-interactively #'dape))
 
 (use-package company
   :config
@@ -597,21 +621,6 @@
 
 ;; Uncomment when mode enabling works fine
 ;; (add-hook 'gud-mode-hook 'mart-dbg-mode)
-
-(defvar openocd-process nil
-  "OpenOCD process identificator")
-
-(defun openocd-start (config)
-  "Start OpenOCD with a CONFIG"
-  (interactive)
-  (setq openocd-process (start-process "OpenOCD" "*openocd*" "openocd" "-f" (format "%s.cfg" config))))
-
-(defun openocd-kill ()
-  (interactive)
-  (when openocd-process
-    (kill-process openocd-process)
-    (kill-buffer "*openocd*")
-    (setq openocd-process nil)))
 
 (defun gdb-pause ()
   "Pause the current execution"
