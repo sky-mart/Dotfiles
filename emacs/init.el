@@ -440,8 +440,7 @@
   ;; The approach with the start- and stopped- hooks doesn't work
   ;; The stopped hook is called righ away
   :bind
-  (("C-<f5>" . dape)
-   ("<f5>" . dape-continue)
+  (("<f5>" . dape)
    ("S-<f5>" . dape-quit)
    ("<f8>" . dape-pause)
    ("<f9>" . dape-breakpoint-toggle)
@@ -466,6 +465,18 @@
      :target "localhost:3333"
      :stopAtBeginningOfMainSubprogram nil
      :stopOnEntry nil)))
+
+(defun mart/dape-mode ()
+   "My dape-mode handling"
+   (interactive)
+   (if dape-active-mode
+       (progn
+         (global-set-key (kbd "<f5>") 'dape-continue)
+         (message "Dape is active"))
+     (global-set-key (kbd "<f5>") 'dape)
+     (message "Dape is inactive")))
+
+(add-hook 'dape-active-mode-hook 'mart/dape-mode)
 
 (use-package company
   :config
