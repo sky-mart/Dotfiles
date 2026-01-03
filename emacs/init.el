@@ -565,91 +565,10 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (c-set-offset 'innamespace '0)
 (c-set-offset 'substatement-open '0)
-;; (electric-pair-mode)
-
-(load-file "~/.emacs.d/esr.el")
-
-(defun mart/c++-mode-hook ()
-  "Custom key bindings for C++ mode."
-  (define-key c++-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
-  (define-key c++-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
-  )
-
-(add-hook 'c++-mode-hook 'mart/c++-mode-hook)
-
-;; (define-key c-mode-map (kbd "<f5>") 'bake-gdb-current-tests)
-
-;; (define-key c-mode-map (kbd "C-<f5>") 'bake-run-current-tests)
-
-;; (define-key c-mode-map (kbd "M-]") 'bake-mock-current)
-;; (define-key c++-mode-map (kbd "M-]") 'bake-mock-current)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Debugging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(make-variable-buffer-local
- (defvar mart-dbg-mode nil
-   "Toggle mart-dbg-mode."))
-
-(defvar mart-dbg-mode-map (make-sparse-keymap)
-  "The keymap for mart-dbg-mode")
-
-;; Define a key in the keymap
-(define-key mart-dbg-mode-map (kbd "<f5>") 'gud-cont)
-(define-key mart-dbg-mode-map (kbd "S-<f5>") 'stop-debugging)
-(define-key mart-dbg-mode-map (kbd "M-<f5>") 'gdb-pause)
-(define-key mart-dbg-mode-map (kbd "<f6>") 'gud-next)
-(define-key mart-dbg-mode-map (kbd "S-<f6>") 'gud-until)
-(define-key mart-dbg-mode-map (kbd "<f7>") 'gud-step)
-(define-key mart-dbg-mode-map (kbd "<f8>") 'gud-break)
-
-
-(add-to-list 'minor-mode-alist '(mart-dbg-mode " mart"))
-(add-to-list 'minor-mode-map-alist (cons 'mart-dbg-mode mart-dbg-mode-map))
-
-(defun mart-dbg-mode (&optional ARG)
-  (interactive (list 'toggle))
-  (setq mart-dbg-mode
-        (if (eq ARG 'toggle)
-            (not mart-dbg-mode)
-          (> ARG 0)))
-
-  (if mart-dbg-mode
-      (message "mart-dbg-mode activated!")
-    (message "mart-dbg-mode deactivated!")))
-
-;; Uncomment when mode enabling works fine
-;; (add-hook 'gud-mode-hook 'mart-dbg-mode)
-
-(defun gdb-pause ()
-  "Pause the current execution"
-  (interactive)
-  (let ((proc (get-buffer-process gud-comint-buffer)))
-    (when (process-live-p proc)
-      (interrupt-process proc)
-      (message "The execution has been interrupted"))))
-
-(defun gdb-kill ()
-  "Kill the GDB process."
-  (interactive)
-  (let ((proc (get-buffer-process gud-comint-buffer))
-        (kill-buffer-query-functions nil))
-    (when (process-live-p proc)
-      (kill-process proc)
-      (message "GDB process killed.")
-      (kill-buffer gud-comint-buffer))))
-
-(defun arm-gdb (executable)
-  (interactive "sExecutable: ")
-  (openocd-start "board/stm32f3discovery")
-  (gdb (format "arm-none-eabi-gdb -i=mi -ex \"target remote :3333\" -ex \"monitor reset halt\" %s" executable)))
-
-(defun stop-debugging ()
-  (interactive)
-  (gdb-kill)
-  (openocd-kill)
-  (message "Stopped debugging"))
 
 (defun bazel-debug-at-point ()
   "Run the test case at point."
