@@ -458,15 +458,11 @@
      :request "launch"
      ;; still have to run file <program> manually in the repl
      :program (lambda ()
-                (read-file-name "ELF file: " dape-cwd-fn))
-     :cwd dape-cwd-fn
+                (read-file-name "ELF file: " (dape-cwd)))
+     :cwd dape-cwd-function
      :target "localhost:3333"
      :stopAtBeginningOfMainSubprogram nil
      :stopOnEntry nil)))
-
-(use-package repeat
-  :custom
-  (repeat-mode t))
 
 (use-package company
   :config
